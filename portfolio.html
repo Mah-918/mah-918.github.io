@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mahmoud Aboukamar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0E0E11;
+      --surface: #161619;
+      --card:    #1C1C21;
+      --border:  #2C2C35;
+      --violet:  #7C5CFC;
+      --vlt:     #A48AFB;
+      --text:    #EBEBF0;
+      --muted:   #8888A0;
+      --faint:   #44444D;
+      --code:    #0B0B0F;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* subtle grain */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 999;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      opacity: .5;
+    }
+
+    /* glow */
+    .glow {
+      position: fixed; border-radius: 50%;
+      filter: blur(140px); pointer-events: none; z-index: 0;
+    }
+    .glow-1 {
+      width: 500px; height: 500px;
+      top: -180px; left: -120px;
+      background: radial-gradient(circle, rgba(124,92,252,.11) 0%, transparent 70%);
+    }
+    .glow-2 {
+      width: 350px; height: 350px;
+      bottom: 10%; right: -80px;
+      background: radial-gradient(circle, rgba(164,138,251,.07) 0%, transparent 70%);
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 52px; height: 58px;
+      background: rgba(14,14,17,.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 15px;
+      letter-spacing: -.3px; color: var(--text);
+    }
+    .logo span { color: var(--vlt); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 12px; font-weight: 500; color: var(--muted);
+      text-decoration: none; letter-spacing: .05em;
+      text-transform: uppercase; transition: color .18s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 0 52px;
+      max-width: 900px; margin: 0 auto;
+    }
+    .hero-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--vlt);
+      letter-spacing: .15em; text-transform: uppercase;
+      margin-bottom: 22px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hero-kicker::before {
+      content: ''; display: block;
+      width: 22px; height: 1px; background: var(--violet);
+    }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(46px, 8vw, 88px);
+      line-height: 1;
+      letter-spacing: -3px;
+      margin-bottom: 24px;
+    }
+    h1 .name-color {
+      color: var(--vlt);
+    }
+    .hero-bio {
+      font-size: 16px; color: var(--muted);
+      max-width: 480px; line-height: 1.7;
+      margin-bottom: 40px;
+    }
+    .hero-bio strong { color: var(--text); font-weight: 500; }
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .cta-main {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px; font-weight: 700;
+      padding: 11px 24px; border-radius: 6px;
+      background: var(--violet); color: #fff;
+      border: none; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: opacity .18s, transform .15s;
+    }
+    .cta-main:hover { opacity: .85; transform: translateY(-1px); }
+    .cta-ghost {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px; font-weight: 600;
+      padding: 11px 24px; border-radius: 6px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted); text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: border-color .18s, color .18s;
+      cursor: pointer;
+    }
+    .cta-ghost:hover { border-color: var(--violet); color: var(--text); }
+
+    /* WRAP */
+    .wrap {
+      position: relative; z-index: 1;
+      max-width: 900px; margin: 0 auto; padding: 0 52px;
+    }
+
+    /* SECTION */
+    .section { padding: 88px 0; }
+    .section-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--violet);
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 12px;
+    }
+    .section-tag::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(24px, 3.5vw, 36px);
+      font-weight: 800; letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      font-size: 14px; color: var(--muted);
+      margin-bottom: 44px; max-width: 520px; line-height: 1.65;
+    }
+
+    /* SKILLS */
+    .skills-wrap {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .skill-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; font-weight: 500;
+      padding: 7px 14px; border-radius: 5px;
+      background: var(--card); border: 1px solid var(--border);
+      color: var(--muted); transition: border-color .18s, color .18s;
+    }
+    .skill-chip:hover { border-color: var(--violet); color: var(--text); }
+    .skill-chip.main {
+      color: var(--vlt); border-color: rgba(124,92,252,.3);
+      background: rgba(124,92,252,.07);
+    }
+
+    /* PROJECT */
+    .project {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .project:hover { border-color: rgba(124,92,252,.3); }
+
+    .project-top {
+      padding: 26px 28px;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: start;
+      user-select: none;
+    }
+    .project-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+    .chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 2px 8px; border-radius: 3px;
+      background: rgba(124,92,252,.1);
+      border: 1px solid rgba(124,92,252,.2);
+      color: var(--vlt);
+    }
+    .chip.sql { background: rgba(103,232,249,.07); border-color: rgba(103,232,249,.2); color: #67E8F9; }
+    .chip.py  { background: rgba(134,239,172,.07); border-color: rgba(134,239,172,.2); color: #86EFAC; }
+    .chip.pbi { background: rgba(252,211,77,.07);  border-color: rgba(252,211,77,.2);  color: #FCD34D; }
+
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 19px; font-weight: 700;
+      letter-spacing: -.3px; margin-bottom: 7px;
+    }
+    .project-desc {
+      font-size: 13.5px; color: var(--muted);
+      line-height: 1.6; max-width: 540px;
+    }
+    .project-arrow {
+      font-size: 18px; color: var(--faint);
+      transition: color .18s, transform .3s;
+      padding-top: 3px; flex-shrink: 0;
+    }
+    .project.open .project-arrow {
+      color: var(--vlt); transform: rotate(45deg);
+    }
+
+    /* PANEL */
+    .project-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height .5s cubic-bezier(.4,0,.2,1);
+    }
+    .project.open .project-body { max-height: 10000px; }
+    .project-inner { padding: 0 28px 28px; }
+    .inner-divider { height: 1px; background: var(--border); margin-bottom: 24px; }
+
+    /* what I did */
+    .what-i-did {
+      font-size: 13px; color: var(--muted);
+      line-height: 1.7; margin-bottom: 24px;
+    }
+    .what-i-did strong { color: var(--text); font-weight: 500; }
+
+    /* schema */
+    .schema {
+      background: var(--code); border: 1px solid var(--border);
+      border-radius: 7px; padding: 18px 20px;
+      overflow-x: auto; margin-bottom: 24px;
+    }
+    .schema pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px; color: #606070; line-height: 1.65;
+    }
+
+    /* code tabs */
+    .file-tabs {
+      display: flex; gap: 0;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto; margin-bottom: 0;
+    }
+    .file-tab {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--faint);
+      padding: 7px 16px; cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px; white-space: nowrap;
+      transition: color .15s, border-color .15s;
+    }
+    .file-tab.on { color: var(--vlt); border-bottom-color: var(--violet); }
+    .code-block {
+      background: var(--code); border: 1px solid var(--border);
+      border-top: none; border-radius: 0 0 7px 7px;
+      padding: 20px 22px; overflow-x: auto; margin-bottom: 20px;
+    }
+    .code-block pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; line-height: 1.8;
+      color: #C0C0D0; white-space: pre;
+    }
+
+    /* numbers */
+    .numbers {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px;
+    }
+    .num-box {
+      flex: 1; min-width: 110px;
+      background: rgba(124,92,252,.05);
+      border: 1px solid rgba(124,92,252,.12);
+      border-radius: 7px; padding: 14px 16px;
+    }
+    .num-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px; font-weight: 800; color: var(--vlt);
+    }
+    .num-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* syntax */
+    .kw  { color: #A48AFB; }
+    .fn  { color: #67E8F9; }
+    .str { color: #86EFAC; }
+    .num { color: #FCA5A5; }
+    .cmt { color: #3D3D55; font-style: italic; }
+    .tbl { color: #FCD34D; }
+    .dec { color: #FDBA74; }
+    .cls { color: #F9A8D4; }
+    .slf { color: #FCA5A5; }
+
+    /* footer */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 32px 52px;
+      max-width: 900px; margin: 0 auto;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 14px;
+    }
+    .footer-text { font-size: 12px; color: var(--faint); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--muted);
+      text-decoration: none; transition: color .18s;
+    }
+    .footer-link:hover { color: var(--vlt); }
+
+    /* fade in */
+    .fade { opacity: 0; transform: translateY(18px); transition: opacity .55s, transform .55s; }
+    .fade.in { opacity: 1; transform: none; }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero, .wrap { padding-left: 20px; padding-right: 20px; }
+      .project-top { grid-template-columns: 1fr; }
+      footer { padding: 24px 20px; }
+      .project-inner { padding: 0 18px 22px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<nav>
+  <div class="logo">MA<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projets</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-kicker">Alternance data/IA — sept. 2026</div>
+  <h1>Mahmoud<br><span class="name-color">Aboukamar</span></h1>
+  <p class="hero-bio">
+    Cycle préparatoire à <strong>ECAM EPMI</strong>, actuellement en Big Data &amp; ML à <strong>EFREI Paris</strong>.<br>
+    J'ai développé mes compétences en data sur des projets personnels — analyse de données football en SQL et suivi budgétaire sous Power BI.
+  </p>
+  <div class="cta-row">
+    <button class="cta-main" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">
+      Voir mes projets
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </button>
+
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- SKILLS -->
+  <section class="section" id="skills">
+    <div class="section-tag">Skills</div>
+    <h2>Compétences</h2>
+    <p class="section-sub">Acquises en cours et approfondies sur des projets personnels.</p>
+    <div class="skills-wrap">
+      <span class="skill-chip main">SQL</span>
+      <span class="skill-chip main">Power BI</span>
+      <span class="skill-chip main">DAX</span>
+      <span class="skill-chip main">Python</span>
+      <span class="skill-chip">HTML / CSS</span>
+      <span class="skill-chip">JavaScript</span>
+      <span class="skill-chip">Git</span>
+      <span class="skill-chip">Excel</span>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section" id="projects">
+    <div class="section-tag">Projets</div>
+    <h2>Projets</h2>
+    <p class="section-sub">Deux projets réalisés en autonomie, sur des sujets qui me tiennent à cœur.</p>
+
+    <!-- ── PROJECT 1 : SQL UCL ── -->
+    <div class="project fade" id="p1">
+      <div class="project-top" onclick="toggle('p1')">
+        <div>
+          <div class="project-chips">
+            <span class="chip sql">SQL</span>
+            <span class="chip sql">PostgreSQL</span>
+            <span class="chip">Analyse de données</span>
+            <span class="chip">Football</span>
+          </div>
+          <div class="project-title">Analyse UCL — performances joueurs en SQL</div>
+          <div class="project-desc">
+            Base de données construite sur deux saisons de Champions League pour répondre à des questions concrètes : qui marque le plus par 90 min ? Quelle défense encaisse le moins ? Comment un joueur progresse-t-il d'une saison à l'autre ?
+          </div>
+        </div>
+        <div class="project-arrow">+</div>
+      </div>
+
+      <div class="project-body" id="p1-body">
+        <div class="project-inner">
+          <div class="inner-divider"></div>
+
+          <p class="what-i-did">
+            Modélisation du schéma relationnel avec <strong>5 tables</strong> normalisées (joueurs, équipes, matchs, stats offensives et défensives), puis alimentation de la base avec les données des saisons 2021-22 et 2022-23 — <strong>42 matchs, 27 joueurs, 12 clubs</strong>. Les requêtes progressent en complexité : agrégations simples, CTEs chaînées, window functions (LAG, RANK, SUM cumulé) et ratios par 90 minutes.
+          </p>
+
+          <div class="schema">
+<pre>
+players ──── stats ──────── matches
+   │          │                │
+   └──► teams  └─► def_stats ◄─┘
+
+players  : player_id, player_name, nationality, position, team_id
+teams    : team_id, team_name, country, stadium
+matches  : match_id, season, stage, home_team_id, away_team_id, home_goals, away_goals
+stats    : stat_id, player_id, match_id, goals, assists, shots, minutes_played ...
+def_stats: def_id, team_id, match_id, tackles_won, clean_sheet, possession_pct ...
+</pre>
+          </div>
+
+          <div class="file-tabs" id="p1-tabs">
+            <div class="file-tab on"  onclick="tab('p1',0,this)">setup.sql</div>
+            <div class="file-tab"     onclick="tab('p1',1,this)">top_buteurs.sql</div>
+            <div class="file-tab"     onclick="tab('p1',2,this)">progressions.sql</div>
+            <div class="file-tab"     onclick="tab('p1',3,this)">defense.sql</div>
+            <div class="file-tab"     onclick="tab('p1',4,this)">saison_vs_saison.sql</div>
+            <div class="file-tab"     onclick="tab('p1',5,this)">profil_joueur.sql</div>
+          </div>
+          <div class="code-block"><pre id="p1-code"></pre></div>
+
+          <div class="numbers">
+            <div class="num-box"><div class="num-val">42</div><div class="num-label">matchs UCL</div></div>
+            <div class="num-box"><div class="num-val">27</div><div class="num-label">joueurs</div></div>
+            <div class="num-box"><div class="num-val">5</div><div class="num-label">tables SQL</div></div>
+            <div class="num-box"><div class="num-val">6</div><div class="num-label">requêtes</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROJECT 2 : Power BI Budget ── -->
+    <div class="project fade" id="p2">
+      <div class="project-top" onclick="toggle('p2')">
+        <div>
+          <div class="project-chips">
+            <span class="chip pbi">Power BI</span>
+            <span class="chip pbi">DAX</span>
+            <span class="chip pbi">Power Query M</span>
+            <span class="chip py">Python</span>
+          </div>
+          <div class="project-title">Dashboard budget personnel — Power BI</div>
+          <div class="project-desc">
+            Pipeline complet de A à Z : nettoyage des relevés bancaires en Python, modèle en étoile sous Power BI et dashboard interactif pour suivre les dépenses par catégorie, le taux d'épargne et les tendances mensuelles.
+          </div>
+        </div>
+        <div class="project-arrow">+</div>
+      </div>
+
+      <div class="project-body" id="p2-body">
+        <div class="project-inner">
+          <div class="inner-divider"></div>
+
+          <p class="what-i-did">
+            Point de départ : un export CSV bancaire avec des libellés texte non structurés. Le script Python <strong>catégorise automatiquement</strong> chaque transaction par expressions régulières (Carrefour → Alimentation, Netflix → Abonnements…) avant l'import. Dans Power BI, j'ai conçu un <strong>modèle en étoile</strong> avec une table de faits et 4 dimensions, une table calendrier générée en DAX, et une quinzaine de mesures couvrant les KPIs principaux, la time intelligence (MTD, YTD, comparaison N-1) et les projections d'épargne.
+          </p>
+
+          <div class="schema">
+<pre>
+                     DIM_Calendrier (DAX)
+                           │
+DIM_Categorie ─── FAIT_Transactions ─── DIM_Budget
+                           │
+                    DIM_CompteBank
+
+FAIT_Transactions : Trans_ID, Date, Montant, Montant_Abs, Type, Cat_ID, Description
+DIM_Calendrier    : Date, Annee, Mois_Num, Mois_Nom, Trimestre, Semaine, Est_Weekend
+DIM_Categorie     : Cat_ID, Categorie, Type (Revenu/Dépense), Budget_Mensuel
+DIM_Budget        : Budget_ID, Mois_Num, Categorie, Montant_Prevu
+</pre>
+          </div>
+
+          <div class="file-tabs" id="p2-tabs">
+            <div class="file-tab on" onclick="tab('p2',0,this)">nettoyage.py</div>
+            <div class="file-tab"    onclick="tab('p2',1,this)">calendrier.dax</div>
+            <div class="file-tab"    onclick="tab('p2',2,this)">kpis.dax</div>
+            <div class="file-tab"    onclick="tab('p2',3,this)">time_intelligence.dax</div>
+            <div class="file-tab"    onclick="tab('p2',4,this)">powerquery.m</div>
+          </div>
+          <div class="code-block"><pre id="p2-code"></pre></div>
+
+          <div class="numbers">
+            <div class="num-box"><div class="num-val">249</div><div class="num-label">transactions</div></div>
+            <div class="num-box"><div class="num-val">9</div><div class="num-label">mois de données</div></div>
+            <div class="num-box"><div class="num-val">15+</div><div class="num-label">mesures DAX</div></div>
+            <div class="num-box"><div class="num-val">100%</div><div class="num-label">catégorisation auto</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<footer>
+  <div class="footer-text">Mahmoud Aboukamar — EFREI Paris 2026</div>
+  <div class="footer-links">
+    <a href="https://linkedin.com/in/mahmoud-aboukamar" class="footer-link">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+const CODE = {
+  p1: [
+    /* 0 setup.sql */
+    `<span class="cmt">-- création des tables et des index</span>
+
+<span class="kw">DROP TABLE IF EXISTS</span> stats, def_stats, matches, players, teams <span class="kw">CASCADE</span>;
+
+<span class="kw">CREATE TABLE</span> <span class="tbl">teams</span> (
+    team_id    <span class="fn">SERIAL PRIMARY KEY</span>,
+    team_name  <span class="fn">VARCHAR</span>(<span class="num">60</span>) <span class="kw">NOT NULL</span>,
+    country    <span class="fn">VARCHAR</span>(<span class="num">40</span>) <span class="kw">NOT NULL</span>,
+    founded    <span class="fn">INT</span>,
+    stadium    <span class="fn">VARCHAR</span>(<span class="num">80</span>)
+);
+
+<span class="kw">CREATE TABLE</span> <span class="tbl">players</span> (
+    player_id   <span class="fn">SERIAL PRIMARY KEY</span>,
+    player_name <span class="fn">VARCHAR</span>(<span class="num">60</span>) <span class="kw">NOT NULL</span>,
+    nationality <span class="fn">VARCHAR</span>(<span class="num">40</span>) <span class="kw">NOT NULL</span>,
+    position    <span class="fn">VARCHAR</span>(<span class="num">5</span>)  <span class="kw">NOT NULL CHECK</span> (position <span class="kw">IN</span> (<span class="str">'FW'</span>,<span class="str">'MF'</span>,<span class="str">'DF'</span>,<span class="str">'GK'</span>)),
+    birth_year  <span class="fn">INT</span>,
+    team_id     <span class="fn">INT REFERENCES</span> <span class="tbl">teams</span>(team_id)
+);
+
+<span class="kw">CREATE TABLE</span> <span class="tbl">matches</span> (
+    match_id     <span class="fn">SERIAL PRIMARY KEY</span>,
+    season       <span class="fn">VARCHAR</span>(<span class="num">10</span>) <span class="kw">NOT NULL</span>,
+    stage        <span class="fn">VARCHAR</span>(<span class="num">30</span>) <span class="kw">NOT NULL</span>,
+    match_date   <span class="fn">DATE</span>        <span class="kw">NOT NULL</span>,
+    home_team_id <span class="fn">INT REFERENCES</span> <span class="tbl">teams</span>(team_id),
+    away_team_id <span class="fn">INT REFERENCES</span> <span class="tbl">teams</span>(team_id),
+    home_goals   <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
+    away_goals   <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
+    attendance   <span class="fn">INT</span>
+);
+
+<span class="kw">CREATE TABLE</span> <span class="tbl">stats</span> (
+    stat_id         <span class="fn">SERIAL PRIMARY KEY</span>,
+    player_id       <span class="fn">INT REFERENCES</span> <span class="tbl">players</span>(player_id),
+    match_id        <span class="fn">INT REFERENCES</span> <span class="tbl">matches</span>(match_id),
+    goals           <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
+    assists         <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
+    shots           <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
+    shots_on_target <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
+    key_passes      <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
+    dribbles_won    <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
+    minutes_played  <span class="fn">INT DEFAULT</span> <span class="num">90</span>
+);
+
+<span class="kw">CREATE TABLE</span> <span class="tbl">def_stats</span> (
+    def_id          <span class="fn">SERIAL PRIMARY KEY</span>,
+    team_id         <span class="fn">INT REFERENCES</span> <span class="tbl">teams</span>(team_id),
+    match_id        <span class="fn">INT REFERENCES</span> <span class="tbl">matches</span>(match_id),
+    tackles_won     <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
+    interceptions   <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
+    clearances      <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
+    fouls_committed <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
+    possession_pct  <span class="fn">NUMERIC</span>(<span class="num">4</span>,<span class="num">1</span>),
+    goals_conceded  <span class="fn">INT DEFAULT</span> <span class="num">0</span>
+);
+
+<span class="kw">CREATE INDEX</span> idx_stats_player   <span class="kw">ON</span> <span class="tbl">stats</span>(player_id);
+<span class="kw">CREATE INDEX</span> idx_stats_match    <span class="kw">ON</span> <span class="tbl">stats</span>(match_id);
+<span class="kw">CREATE INDEX</span> idx_matches_season <span class="kw">ON</span> <span class="tbl">matches</span>(season);
+
+<span class="cmt">-- vue résumé par saison</span>
+<span class="kw">CREATE OR REPLACE VIEW</span> <span class="tbl">season_summary</span> <span class="kw">AS</span>
+<span class="kw">SELECT</span>
+    m.season,
+    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> m.match_id)                       <span class="kw">AS</span> nb_matchs,
+    <span class="fn">SUM</span>(m.home_goals + m.away_goals)                  <span class="kw">AS</span> total_buts,
+    <span class="fn">ROUND</span>(<span class="fn">AVG</span>(m.home_goals+m.away_goals)::NUMERIC,<span class="num">2</span>) <span class="kw">AS</span> moy_buts_match
+<span class="kw">FROM</span> <span class="tbl">matches</span> m
+<span class="kw">JOIN</span> <span class="tbl">stats</span>   s <span class="kw">ON</span> m.match_id = s.match_id
+<span class="kw">GROUP BY</span> m.season;`,
+
+    /* 1 top_buteurs.sql */
+    `<span class="cmt">-- top 10 buteurs, avec leurs ratios par match et par 90 min</span>
+
+<span class="kw">WITH</span> <span class="tbl">totaux</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        p.player_name,
+        p.nationality,
+        p.position,
+        t.team_name,
+        <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> s.match_id)                              <span class="kw">AS</span> matchs,
+        <span class="fn">SUM</span>(s.goals)                                             <span class="kw">AS</span> buts,
+        <span class="fn">SUM</span>(s.assists)                                           <span class="kw">AS</span> passes_dec,
+        <span class="fn">SUM</span>(s.goals) + <span class="fn">SUM</span>(s.assists)                          <span class="kw">AS</span> contributions,
+        <span class="fn">SUM</span>(s.shots)                                             <span class="kw">AS</span> tirs,
+        <span class="fn">SUM</span>(s.shots_on_target)                                   <span class="kw">AS</span> tirs_cadres,
+        <span class="fn">SUM</span>(s.minutes_played)                                    <span class="kw">AS</span> minutes,
+        <span class="fn">ROUND</span>(<span class="fn">SUM</span>(s.goals)::NUMERIC
+              / <span class="fn">NULLIF</span>(<span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> s.match_id), <span class="num">0</span>), <span class="num">2</span>)   <span class="kw">AS</span> buts_par_match,
+        <span class="fn">ROUND</span>(<span class="fn">SUM</span>(s.goals)::NUMERIC
+              / <span class="fn">NULLIF</span>(<span class="fn">SUM</span>(s.minutes_played), <span class="num">0</span>) * <span class="num">90</span>, <span class="num">2</span>)  <span class="kw">AS</span> buts_p90,
+        <span class="fn">ROUND</span>(<span class="fn">SUM</span>(s.shots_on_target)::NUMERIC
+              / <span class="fn">NULLIF</span>(<span class="fn">SUM</span>(s.shots), <span class="num">0</span>) * <span class="num">100</span>, <span class="num">1</span>)           <span class="kw">AS</span> precision_pct
+    <span class="kw">FROM</span> <span class="tbl">players</span> p
+    <span class="kw">JOIN</span> <span class="tbl">stats</span>   s <span class="kw">ON</span> p.player_id = s.player_id
+    <span class="kw">JOIN</span> <span class="tbl">matches</span> m <span class="kw">ON</span> s.match_id  = m.match_id
+    <span class="kw">JOIN</span> <span class="tbl">teams</span>   t <span class="kw">ON</span> p.team_id   = t.team_id
+    <span class="kw">GROUP BY</span> p.player_id, p.player_name, p.nationality, p.position, t.team_name
+    <span class="kw">HAVING</span> <span class="fn">SUM</span>(s.goals) >= <span class="num">1</span>
+)
+<span class="kw">SELECT</span>
+    <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> buts <span class="kw">DESC</span>) <span class="kw">AS</span> rang,
+    player_name, nationality, position, team_name,
+    matchs, buts, passes_dec, contributions,
+    buts_par_match, buts_p90, precision_pct
+<span class="kw">FROM</span> <span class="tbl">totaux</span>
+<span class="kw">ORDER BY</span> buts <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">10</span>;`,
+
+    /* 2 progressions.sql */
+    `<span class="cmt">-- évolution joueur par joueur entre les deux saisons
+-- LAG pour comparer, SUM cumulé, moyenne mobile</span>
+
+<span class="kw">WITH</span> <span class="tbl">par_saison</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        p.player_name,
+        m.season,
+        <span class="fn">SUM</span>(s.goals)               <span class="kw">AS</span> buts,
+        <span class="fn">SUM</span>(s.assists)             <span class="kw">AS</span> passes_dec,
+        <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> s.match_id) <span class="kw">AS</span> matchs
+    <span class="kw">FROM</span> <span class="tbl">players</span> p
+    <span class="kw">JOIN</span> <span class="tbl">stats</span>   s <span class="kw">ON</span> p.player_id = s.player_id
+    <span class="kw">JOIN</span> <span class="tbl">matches</span> m <span class="kw">ON</span> s.match_id  = m.match_id
+    <span class="kw">GROUP BY</span> p.player_name, m.season
+)
+<span class="kw">SELECT</span>
+    player_name,
+    season,
+    buts,
+    passes_dec,
+
+    <span class="cmt">-- rang dans la saison</span>
+    <span class="fn">RANK</span>() <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> season
+        <span class="kw">ORDER BY</span> buts <span class="kw">DESC</span>
+    ) <span class="kw">AS</span> rang_saison,
+
+    <span class="cmt">-- buts la saison d'avant</span>
+    <span class="fn">LAG</span>(buts, <span class="num">1</span>) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> player_name
+        <span class="kw">ORDER BY</span> season
+    ) <span class="kw">AS</span> buts_saison_prec,
+
+    <span class="cmt">-- différence avec la saison précédente</span>
+    buts - <span class="fn">LAG</span>(buts, <span class="num">1</span>) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> player_name
+        <span class="kw">ORDER BY</span> season
+    ) <span class="kw">AS</span> progression,
+
+    <span class="cmt">-- total cumulé sur toutes les saisons</span>
+    <span class="fn">SUM</span>(buts) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> player_name
+        <span class="kw">ORDER BY</span> season
+        <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>
+    ) <span class="kw">AS</span> buts_cumules,
+
+    <span class="cmt">-- meilleure saison du joueur</span>
+    <span class="fn">FIRST_VALUE</span>(buts) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> player_name
+        <span class="kw">ORDER BY</span> buts <span class="kw">DESC</span>
+    ) <span class="kw">AS</span> record_saison
+
+<span class="kw">FROM</span> <span class="tbl">par_saison</span>
+<span class="kw">ORDER BY</span> player_name, season;`,
+
+    /* 3 defense.sql */
+    `<span class="cmt">-- analyse défensive par équipe : clean sheets, tacles, possession
+-- NTILE pour classer les défenses en 3 tiers</span>
+
+<span class="kw">WITH</span> <span class="tbl">def_base</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        t.team_name,
+        t.country,
+        m.season,
+        <span class="fn">COUNT</span>(m.match_id)                              <span class="kw">AS</span> matchs,
+        <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> ds.goals_conceded = <span class="num">0</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">END</span>) <span class="kw">AS</span> clean_sheets,
+        <span class="fn">ROUND</span>(<span class="fn">AVG</span>(ds.goals_conceded)::NUMERIC, <span class="num">2</span>)     <span class="kw">AS</span> moy_encaisses,
+        <span class="fn">SUM</span>(ds.tackles_won)                            <span class="kw">AS</span> tacles,
+        <span class="fn">SUM</span>(ds.interceptions)                          <span class="kw">AS</span> interceptions,
+        <span class="fn">ROUND</span>(<span class="fn">AVG</span>(ds.possession_pct)::NUMERIC, <span class="num">1</span>)      <span class="kw">AS</span> possession_moy,
+        <span class="fn">ROUND</span>(
+            (<span class="fn">SUM</span>(ds.tackles_won) + <span class="fn">SUM</span>(ds.interceptions))::NUMERIC
+            / <span class="fn">NULLIF</span>(<span class="fn">COUNT</span>(m.match_id), <span class="num">0</span>), <span class="num">1</span>
+        )                                              <span class="kw">AS</span> actions_def_par_match
+    <span class="kw">FROM</span> <span class="tbl">teams</span>     t
+    <span class="kw">JOIN</span> <span class="tbl">def_stats</span> ds <span class="kw">ON</span> t.team_id   = ds.team_id
+    <span class="kw">JOIN</span> <span class="tbl">matches</span>   m  <span class="kw">ON</span> ds.match_id = m.match_id
+    <span class="kw">GROUP BY</span> t.team_name, t.country, m.season
+)
+<span class="kw">SELECT</span>
+    *,
+    <span class="fn">NTILE</span>(<span class="num">3</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> clean_sheets <span class="kw">DESC</span>)    <span class="kw">AS</span> tier,
+    <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (
+        <span class="kw">PARTITION BY</span> season
+        <span class="kw">ORDER BY</span> clean_sheets <span class="kw">DESC</span>
+    )                                               <span class="kw">AS</span> rang_saison
+<span class="kw">FROM</span> <span class="tbl">def_base</span>
+<span class="kw">ORDER BY</span> season <span class="kw">DESC</span>, clean_sheets <span class="kw">DESC</span>;`,
+
+    /* 4 saison_vs_saison.sql */
+    `<span class="cmt">-- comparaison des deux saisons : buts, rythme, possession
+-- LEFT JOIN de la table sur elle-même avec décalage d'un an</span>
+
+<span class="kw">WITH</span> <span class="tbl">par_saison</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        m.season,
+        <span class="fn">SUBSTRING</span>(m.season, <span class="num">1</span>, <span class="num">4</span>)::INT                   <span class="kw">AS</span> annee,
+        <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> m.match_id)                        <span class="kw">AS</span> matchs,
+        <span class="fn">SUM</span>(m.home_goals + m.away_goals)                  <span class="kw">AS</span> total_buts,
+        <span class="fn">ROUND</span>(<span class="fn">AVG</span>(m.home_goals+m.away_goals)::NUMERIC,<span class="num">2</span>) <span class="kw">AS</span> moy_buts,
+        <span class="fn">SUM</span>(ds.fouls_committed)                            <span class="kw">AS</span> fautes,
+        <span class="fn">ROUND</span>(<span class="fn">AVG</span>(ds.possession_pct)::NUMERIC, <span class="num">1</span>)          <span class="kw">AS</span> possession_moy
+    <span class="kw">FROM</span> <span class="tbl">matches</span>   m
+    <span class="kw">JOIN</span> <span class="tbl">def_stats</span> ds <span class="kw">ON</span> m.match_id = ds.match_id
+    <span class="kw">GROUP BY</span> m.season
+)
+<span class="kw">SELECT</span>
+    curr.season,
+    curr.total_buts,
+    prev.total_buts                                    <span class="kw">AS</span> buts_saison_prec,
+    curr.total_buts - <span class="fn">COALESCE</span>(prev.total_buts, <span class="num">0</span>)    <span class="kw">AS</span> delta,
+    <span class="fn">ROUND</span>(
+        (curr.total_buts - <span class="fn">COALESCE</span>(prev.total_buts, curr.total_buts))::NUMERIC
+        / <span class="fn">NULLIF</span>(prev.total_buts, <span class="num">0</span>) * <span class="num">100</span>, <span class="num">1</span>
+    )                                                   <span class="kw">AS</span> evolution_pct,
+    curr.moy_buts,
+    curr.possession_moy,
+    curr.fautes
+<span class="kw">FROM</span>      <span class="tbl">par_saison</span> curr
+<span class="kw">LEFT JOIN</span> <span class="tbl">par_saison</span> prev <span class="kw">ON</span> curr.annee = prev.annee + <span class="num">1</span>
+<span class="kw">ORDER BY</span> curr.annee <span class="kw">DESC</span>;`,
+
+    /* 5 profil_joueur.sql */
+    `<span class="cmt">-- profil complet d'un joueur : stats + ratios + cumul
+-- changer le player_id pour voir un autre joueur</span>
+
+<span class="kw">WITH</span> <span class="tbl">career</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        p.player_name, p.nationality, p.position,
+        m.season, t.team_name,
+        <span class="fn">SUM</span>(s.goals)               <span class="kw">AS</span> buts,
+        <span class="fn">SUM</span>(s.assists)             <span class="kw">AS</span> passes_dec,
+        <span class="fn">SUM</span>(s.shots)               <span class="kw">AS</span> tirs,
+        <span class="fn">SUM</span>(s.shots_on_target)     <span class="kw">AS</span> tirs_cadres,
+        <span class="fn">SUM</span>(s.key_passes)          <span class="kw">AS</span> passes_cles,
+        <span class="fn">SUM</span>(s.minutes_played)      <span class="kw">AS</span> minutes,
+        <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> s.match_id) <span class="kw">AS</span> matchs
+    <span class="kw">FROM</span> <span class="tbl">players</span> p
+    <span class="kw">JOIN</span> <span class="tbl">stats</span>   s <span class="kw">ON</span> p.player_id = s.player_id
+    <span class="kw">JOIN</span> <span class="tbl">matches</span> m <span class="kw">ON</span> s.match_id  = m.match_id
+    <span class="kw">JOIN</span> <span class="tbl">teams</span>   t <span class="kw">ON</span> p.team_id   = t.team_id
+    <span class="kw">WHERE</span>  p.player_id = <span class="num">6</span>   <span class="cmt">-- Haaland</span>
+    <span class="kw">GROUP BY</span> p.player_name, p.nationality, p.position, m.season, t.team_name
+)
+<span class="kw">SELECT</span>
+    *,
+    <span class="fn">ROUND</span>(buts::NUMERIC / <span class="fn">NULLIF</span>(matchs, <span class="num">0</span>), <span class="num">2</span>)        <span class="kw">AS</span> buts_par_match,
+    <span class="fn">ROUND</span>(buts::NUMERIC / <span class="fn">NULLIF</span>(minutes, <span class="num">0</span>) * <span class="num">90</span>, <span class="num">2</span>) <span class="kw">AS</span> buts_p90,
+    <span class="fn">ROUND</span>(tirs_cadres::NUMERIC / <span class="fn">NULLIF</span>(tirs, <span class="num">0</span>) * <span class="num">100</span>, <span class="num">1</span>) <span class="kw">AS</span> precision_pct,
+    <span class="fn">SUM</span>(buts) <span class="kw">OVER</span> (
+        <span class="kw">ORDER BY</span> season
+        <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>
+    ) <span class="kw">AS</span> buts_cumules
+<span class="kw">FROM</span> <span class="tbl">career</span>
+<span class="kw">ORDER BY</span> season;`
+  ],
+
+  p2: [
+    /* 0 nettoyage.py */
+    `<span class="cmt"># nettoyage des relevés bancaires CSV avant import Power BI
+# catégorisation automatique via regex</span>
+
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy  <span class="kw">as</span> np
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> matplotlib.ticker <span class="kw">as</span> mtick
+<span class="kw">from</span> pathlib <span class="kw">import</span> Path
+
+
+<span class="cls">class</span> <span class="tbl">BudgetCleaner</span>:
+
+    CATEGORIES = {
+        <span class="str">"Alimentation"</span>: [<span class="str">r"carrefour"</span>, <span class="str">r"lidl"</span>, <span class="str">r"franprix"</span>, <span class="str">r"monoprix"</span>, <span class="str">r"auchan"</span>],
+        <span class="str">"Transport"</span>:    [<span class="str">r"sncf"</span>, <span class="str">r"navigo"</span>, <span class="str">r"uber"</span>, <span class="str">r"ratp"</span>, <span class="str">r"blablacar"</span>],
+        <span class="str">"Abonnements"</span>:  [<span class="str">r"netflix"</span>, <span class="str">r"spotify"</span>, <span class="str">r"free mobile"</span>, <span class="str">r"sfr"</span>, <span class="str">r"amazon"</span>],
+        <span class="str">"Loisirs"</span>:      [<span class="str">r"cinema"</span>, <span class="str">r"restaurant"</span>, <span class="str">r"steam"</span>, <span class="str">r"fnac"</span>, <span class="str">r"nike"</span>],
+        <span class="str">"Logement"</span>:     [<span class="str">r"loyer"</span>, <span class="str">r"edf"</span>, <span class="str">r"assurance"</span>],
+        <span class="str">"Sante"</span>:        [<span class="str">r"pharmacie"</span>, <span class="str">r"medecin"</span>, <span class="str">r"mutuelle"</span>],
+        <span class="str">"Epargne"</span>:      [<span class="str">r"livret a"</span>, <span class="str">r"pea"</span>, <span class="str">r"virement epargne"</span>],
+        <span class="str">"Revenus"</span>:      [<span class="str">r"salaire"</span>, <span class="str">r"alternance"</span>, <span class="str">r"virement recu"</span>],
+    }
+
+    <span class="cls">def</span> <span class="fn">__init__</span>(<span class="slf">self</span>, filepath):
+        <span class="slf">self</span>.path = Path(filepath)
+        <span class="slf">self</span>.df   = <span class="fn">None</span>
+
+    <span class="cls">def</span> <span class="fn">load</span>(<span class="slf">self</span>):
+        <span class="slf">self</span>.df = pd.<span class="fn">read_csv</span>(<span class="slf">self</span>.path, encoding=<span class="str">"utf-8-sig"</span>)
+        <span class="slf">self</span>.df[<span class="str">"Date"</span>] = pd.<span class="fn">to_datetime</span>(<span class="slf">self</span>.df[<span class="str">"Date"</span>])
+        <span class="kw">print</span>(<span class="str">f"chargé : {len(self.df)} lignes"</span>)
+        <span class="kw">return</span> <span class="slf">self</span>
+
+    <span class="cls">def</span> <span class="fn">clean</span>(<span class="slf">self</span>):
+        <span class="slf">self</span>.df.<span class="fn">drop_duplicates</span>(subset=[<span class="str">"Date"</span>, <span class="str">"Description"</span>, <span class="str">"Montant"</span>], inplace=<span class="fn">True</span>)
+        <span class="slf">self</span>.df.<span class="fn">dropna</span>(subset=[<span class="str">"Montant"</span>, <span class="str">"Description"</span>], inplace=<span class="fn">True</span>)
+        <span class="slf">self</span>.df = <span class="slf">self</span>.df[<span class="slf">self</span>.df[<span class="str">"Montant"</span>] != <span class="num">0</span>]
+        <span class="slf">self</span>.df[<span class="str">"Description"</span>] = (
+            <span class="slf">self</span>.df[<span class="str">"Description"</span>]
+            .<span class="fn">str</span>.<span class="fn">lower</span>().<span class="fn">str</span>.<span class="fn">strip</span>()
+            .<span class="fn">str</span>.<span class="fn">replace</span>(<span class="str">r"\s+"</span>, <span class="str">" "</span>, regex=<span class="fn">True</span>)
+        )
+        <span class="slf">self</span>.df[<span class="str">"Type"</span>]       = np.<span class="fn">where</span>(<span class="slf">self</span>.df[<span class="str">"Montant"</span>] >= <span class="num">0</span>, <span class="str">"Revenu"</span>, <span class="str">"Dépense"</span>)
+        <span class="slf">self</span>.df[<span class="str">"Montant_Abs"</span>] = <span class="slf">self</span>.df[<span class="str">"Montant"</span>].<span class="fn">abs</span>()
+        <span class="kw">return</span> <span class="slf">self</span>
+
+    <span class="cls">def</span> <span class="fn">categorize</span>(<span class="slf">self</span>):
+        <span class="slf">self</span>.df[<span class="str">"Categorie"</span>] = <span class="str">"Autre"</span>
+        <span class="kw">for</span> cat, patterns <span class="kw">in</span> <span class="slf">self</span>.CATEGORIES.<span class="fn">items</span>():
+            mask = <span class="slf">self</span>.df[<span class="str">"Description"</span>].<span class="fn">str</span>.<span class="fn">contains</span>(
+                <span class="str">"|"</span>.<span class="fn">join</span>(patterns), case=<span class="fn">False</span>, na=<span class="fn">False</span>, regex=<span class="fn">True</span>
+            )
+            <span class="slf">self</span>.df.<span class="fn">loc</span>[mask, <span class="str">"Categorie"</span>] = cat
+        couv = (<span class="slf">self</span>.df[<span class="str">"Categorie"</span>] != <span class="str">"Autre"</span>).<span class="fn">mean</span>()
+        <span class="kw">print</span>(<span class="str">f"catégorisation : {couv:.1%}"</span>)
+        <span class="kw">return</span> <span class="slf">self</span>
+
+    <span class="cls">def</span> <span class="fn">add_dates</span>(<span class="slf">self</span>):
+        <span class="slf">self</span>.df[<span class="str">"Annee"</span>]      = <span class="slf">self</span>.df[<span class="str">"Date"</span>].dt.year
+        <span class="slf">self</span>.df[<span class="str">"Mois_Num"</span>]   = <span class="slf">self</span>.df[<span class="str">"Date"</span>].dt.month
+        <span class="slf">self</span>.df[<span class="str">"Mois_Nom"</span>]   = <span class="slf">self</span>.df[<span class="str">"Date"</span>].dt.<span class="fn">strftime</span>(<span class="str">"%B"</span>)
+        <span class="slf">self</span>.df[<span class="str">"Trimestre"</span>]  = <span class="str">"T"</span> + <span class="slf">self</span>.df[<span class="str">"Date"</span>].dt.quarter.<span class="fn">astype</span>(<span class="tbl">str</span>)
+        <span class="slf">self</span>.df[<span class="str">"Annee_Mois"</span>] = <span class="slf">self</span>.df[<span class="str">"Date"</span>].dt.<span class="fn">strftime</span>(<span class="str">"%Y-%m"</span>)
+        <span class="slf">self</span>.df[<span class="str">"Est_Weekend"</span>] = <span class="slf">self</span>.df[<span class="str">"Date"</span>].dt.weekday >= <span class="num">5</span>
+        <span class="kw">return</span> <span class="slf">self</span>
+
+    <span class="cls">def</span> <span class="fn">plot</span>(<span class="slf">self</span>):
+        dep = <span class="slf">self</span>.df[<span class="slf">self</span>.df[<span class="str">"Type"</span>] == <span class="str">"Dépense"</span>]
+        fig, axes = plt.<span class="fn">subplots</span>(<span class="num">2</span>, <span class="num">2</span>, figsize=(<span class="num">14</span>, <span class="num">9</span>))
+        fig.patch.<span class="fn">set_facecolor</span>(<span class="str">"#0E0E11"</span>)
+        colors = [<span class="str">"#7C5CFC"</span>,<span class="str">"#A48AFB"</span>,<span class="str">"#67E8F9"</span>,<span class="str">"#86EFAC"</span>,<span class="str">"#FCD34D"</span>,<span class="str">"#FCA5A5"</span>,<span class="str">"#FDBA74"</span>]
+        <span class="kw">for</span> ax <span class="kw">in</span> axes.flat:
+            ax.<span class="fn">set_facecolor</span>(<span class="str">"#1C1C21"</span>)
+            ax.tick_params(colors=<span class="str">"#8888A0"</span>)
+            ax.spines[:].<span class="fn">set_color</span>(<span class="str">"#2C2C35"</span>)
+
+        cat_sum = dep.<span class="fn">groupby</span>(<span class="str">"Categorie"</span>)[<span class="str">"Montant_Abs"</span>].<span class="fn">sum</span>()
+        axes[<span class="num">0</span>,<span class="num">0</span>].<span class="fn">pie</span>(cat_sum, labels=cat_sum.index, colors=colors,
+                     autopct=<span class="str">"%1.1f%%"</span>, wedgeprops={<span class="str">"width"</span>: <span class="num">0.5</span>},
+                     textprops={<span class="str">"color"</span>: <span class="str">"#EBEBF0"</span>, <span class="str">"size"</span>: <span class="num">9</span>})
+        axes[<span class="num">0</span>,<span class="num">0</span>].<span class="fn">set_title</span>(<span class="str">"Répartition des dépenses"</span>, color=<span class="str">"#EBEBF0"</span>)
+
+        rev_m = <span class="slf">self</span>.df[<span class="slf">self</span>.df[<span class="str">"Type"</span>]==<span class="str">"Revenu"</span>].<span class="fn">groupby</span>(<span class="str">"Annee_Mois"</span>)[<span class="str">"Montant"</span>].<span class="fn">sum</span>()
+        dep_m = dep.<span class="fn">groupby</span>(<span class="str">"Annee_Mois"</span>)[<span class="str">"Montant_Abs"</span>].<span class="fn">sum</span>()
+        solde_m = (rev_m - dep_m).<span class="fn">fillna</span>(<span class="num">0</span>)
+
+        bar_colors = [<span class="str">"#86EFAC"</span> <span class="kw">if</span> v >= <span class="num">0</span> <span class="kw">else</span> <span class="str">"#FCA5A5"</span> <span class="kw">for</span> v <span class="kw">in</span> solde_m]
+        axes[<span class="num">1</span>,<span class="num">0</span>].<span class="fn">bar</span>(<span class="fn">range</span>(<span class="fn">len</span>(solde_m)), solde_m, color=bar_colors)
+        axes[<span class="num">1</span>,<span class="num">0</span>].<span class="fn">axhline</span>(<span class="num">0</span>, color=<span class="str">"#44444D"</span>, linewidth=<span class="num">0.8</span>, linestyle=<span class="str">"--"</span>)
+        axes[<span class="num">1</span>,<span class="num">0</span>].<span class="fn">set_title</span>(<span class="str">"Solde mensuel"</span>, color=<span class="str">"#EBEBF0"</span>)
+
+        solde_cumul = solde_m.<span class="fn">cumsum</span>()
+        axes[<span class="num">1</span>,<span class="num">1</span>].<span class="fn">plot</span>(solde_cumul.values, color=<span class="str">"#7C5CFC"</span>, linewidth=<span class="num">2</span>, marker=<span class="str">"o"</span>)
+        axes[<span class="num">1</span>,<span class="num">1</span>].<span class="fn">fill_between</span>(<span class="fn">range</span>(<span class="fn">len</span>(solde_cumul)), solde_cumul, alpha=<span class="num">0.12</span>, color=<span class="str">"#7C5CFC"</span>)
+        axes[<span class="num">1</span>,<span class="num">1</span>].<span class="fn">set_title</span>(<span class="str">"Épargne cumulée"</span>, color=<span class="str">"#EBEBF0"</span>)
+
+        plt.<span class="fn">tight_layout</span>()
+        plt.<span class="fn">savefig</span>(<span class="str">"budget_dashboard.png"</span>, dpi=<span class="num">150</span>, facecolor=<span class="str">"#0E0E11"</span>)
+        <span class="kw">return</span> <span class="slf">self</span>
+
+    <span class="cls">def</span> <span class="fn">export</span>(<span class="slf">self</span>, output=<span class="str">"budget_clean.csv"</span>):
+        <span class="slf">self</span>.df.<span class="fn">to_csv</span>(output, index=<span class="fn">True</span>, encoding=<span class="str">"utf-8-sig"</span>)
+        <span class="kw">print</span>(<span class="str">f"exporté : {output}"</span>)
+        <span class="kw">return</span> <span class="slf">self</span>.df
+
+
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    (BudgetCleaner(<span class="str">"releve.csv"</span>)
+        .<span class="fn">load</span>().<span class="fn">clean</span>().<span class="fn">categorize</span>().<span class="fn">add_dates</span>().<span class="fn">plot</span>().<span class="fn">export</span>())`,
+
+    /* 1 calendrier.dax */
+    `<span class="cmt">// table calendrier générée en DAX
+// c'est la base de toutes les mesures time intelligence</span>
+
+<span class="tbl">DIM_Calendrier</span> =
+<span class="kw">VAR</span> <span class="dec">DateMin</span> = <span class="fn">MIN</span>( <span class="tbl">FAIT_Transactions</span>[Date] )
+<span class="kw">VAR</span> <span class="dec">DateMax</span> = <span class="fn">MAX</span>( <span class="tbl">FAIT_Transactions</span>[Date] )
+<span class="kw">RETURN</span>
+<span class="fn">ADDCOLUMNS</span>(
+    <span class="fn">CALENDAR</span>( <span class="dec">DateMin</span>, <span class="dec">DateMax</span> ),
+    <span class="str">"Annee"</span>,        <span class="fn">YEAR</span>( [Date] ),
+    <span class="str">"Mois_Num"</span>,     <span class="fn">MONTH</span>( [Date] ),
+    <span class="str">"Mois_Nom"</span>,     <span class="fn">FORMAT</span>( [Date], <span class="str">"MMMM"</span> ),
+    <span class="str">"Mois_Court"</span>,   <span class="fn">FORMAT</span>( [Date], <span class="str">"MMM"</span> ),
+    <span class="str">"Trimestre"</span>,    <span class="str">"T"</span> & <span class="fn">QUARTER</span>( [Date] ),
+    <span class="str">"Semaine"</span>,      <span class="fn">WEEKNUM</span>( [Date], <span class="num">2</span> ),
+    <span class="str">"Jour_Semaine"</span>, <span class="fn">FORMAT</span>( [Date], <span class="str">"dddd"</span> ),
+    <span class="str">"Jour_Num"</span>,     <span class="fn">WEEKDAY</span>( [Date], <span class="num">2</span> ),
+    <span class="str">"Annee_Mois"</span>,   <span class="fn">FORMAT</span>( [Date], <span class="str">"YYYY-MM"</span> ),
+    <span class="str">"Est_Weekend"</span>,  <span class="fn">IF</span>( <span class="fn">WEEKDAY</span>( [Date], <span class="num">2</span> ) >= <span class="num">6</span>, <span class="fn">TRUE</span>(), <span class="fn">FALSE</span>() ),
+    <span class="str">"Label_Axe"</span>,    <span class="fn">FORMAT</span>( [Date], <span class="str">"MMM"</span> ) & <span class="str">" "</span> & <span class="fn">RIGHT</span>( <span class="fn">FORMAT</span>( [Date], <span class="str">"YYYY"</span> ), <span class="num">2</span> )
+)`,
+
+    /* 2 kpis.dax */
+    `<span class="cmt">// mesures principales : revenus, dépenses, solde, budget</span>
+
+<span class="tbl">Revenus Total</span> =
+    <span class="fn">CALCULATE</span>(
+        <span class="fn">SUM</span>( <span class="tbl">FAIT_Transactions</span>[Montant] ),
+        <span class="tbl">FAIT_Transactions</span>[Type] = <span class="str">"Revenu"</span>
+    )
+
+<span class="tbl">Dépenses Total</span> =
+    <span class="fn">CALCULATE</span>(
+        <span class="fn">ABS</span>( <span class="fn">SUM</span>( <span class="tbl">FAIT_Transactions</span>[Montant] ) ),
+        <span class="tbl">FAIT_Transactions</span>[Type] = <span class="str">"Dépense"</span>
+    )
+
+<span class="tbl">Solde Net</span> = [<span class="tbl">Revenus Total</span>] - [<span class="tbl">Dépenses Total</span>]
+
+<span class="tbl">Taux Épargne</span> = <span class="fn">DIVIDE</span>( [<span class="tbl">Solde Net</span>], [<span class="tbl">Revenus Total</span>], <span class="num">0</span> )
+
+<span class="tbl">Budget Prévu</span> =
+    <span class="fn">CALCULATE</span>(
+        <span class="fn">SUM</span>( <span class="tbl">DIM_Budget</span>[Montant_Prevu] ),
+        <span class="fn">USERELATIONSHIP</span>( <span class="tbl">DIM_Budget</span>[Mois_Num], <span class="tbl">DIM_Calendrier</span>[Mois_Num] )
+    )
+
+<span class="tbl">Écart Budget</span>   = [<span class="tbl">Dépenses Total</span>] - [<span class="tbl">Budget Prévu</span>]
+<span class="tbl">Écart Budget %</span> = <span class="fn">DIVIDE</span>( [<span class="tbl">Écart Budget</span>], [<span class="tbl">Budget Prévu</span>], <span class="num">0</span> )
+
+<span class="tbl">Statut Budget</span> =
+    <span class="fn">SWITCH</span>( <span class="fn">TRUE</span>(),
+        [<span class="tbl">Écart Budget</span>]   <= <span class="num">0</span>,    <span class="str">"✅ ok"</span>,
+        [<span class="tbl">Écart Budget %</span>] <= <span class="num">0.10</span>, <span class="str">"⚠️ léger dépassement"</span>,
+        [<span class="tbl">Écart Budget %</span>] <= <span class="num">0.25</span>, <span class="str">"🟠 dépassement modéré"</span>,
+                                    <span class="str">"🔴 dépassement critique"</span>
+    )
+
+<span class="tbl">Part Catégorie %</span> =
+    <span class="fn">DIVIDE</span>(
+        <span class="fn">CALCULATE</span>( [<span class="tbl">Dépenses Total</span>],
+            <span class="fn">ALLEXCEPT</span>( <span class="tbl">DIM_Categorie</span>, <span class="tbl">DIM_Categorie</span>[Categorie] )),
+        <span class="fn">CALCULATE</span>( [<span class="tbl">Dépenses Total</span>], <span class="fn">ALL</span>( <span class="tbl">DIM_Categorie</span> )),
+        <span class="num">0</span>
+    )
+
+<span class="tbl">Panier Moyen</span> =
+    <span class="fn">DIVIDE</span>( [<span class="tbl">Dépenses Total</span>], <span class="fn">COUNTROWS</span>( <span class="tbl">FAIT_Transactions</span> ), <span class="num">0</span> )`,
+
+    /* 3 time_intelligence.dax */
+    `<span class="cmt">// MTD, YTD, mois précédent, N-1, moyenne mobile, projection</span>
+
+<span class="tbl">Dépenses MTD</span> =
+    <span class="fn">CALCULATE</span>( [<span class="tbl">Dépenses Total</span>], <span class="fn">DATESMTD</span>( <span class="tbl">DIM_Calendrier</span>[Date] ) )
+
+<span class="tbl">Dépenses YTD</span> =
+    <span class="fn">CALCULATE</span>( [<span class="tbl">Dépenses Total</span>], <span class="fn">DATESYTD</span>( <span class="tbl">DIM_Calendrier</span>[Date] ) )
+
+<span class="tbl">Épargne YTD</span> =
+    <span class="fn">CALCULATE</span>( [<span class="tbl">Solde Net</span>], <span class="fn">DATESYTD</span>( <span class="tbl">DIM_Calendrier</span>[Date] ) )
+
+<span class="tbl">Dépenses Mois Préc</span> =
+    <span class="fn">CALCULATE</span>( [<span class="tbl">Dépenses Total</span>], <span class="fn">PREVIOUSMONTH</span>( <span class="tbl">DIM_Calendrier</span>[Date] ) )
+
+<span class="tbl">Variation MoM</span> =
+    <span class="fn">DIVIDE</span>(
+        [<span class="tbl">Dépenses Total</span>] - [<span class="tbl">Dépenses Mois Préc</span>],
+        [<span class="tbl">Dépenses Mois Préc</span>], <span class="num">0</span>
+    )
+
+<span class="tbl">Dépenses N-1</span> =
+    <span class="fn">CALCULATE</span>( [<span class="tbl">Dépenses Total</span>],
+        <span class="fn">SAMEPERIODLASTYEAR</span>( <span class="tbl">DIM_Calendrier</span>[Date] ) )
+
+<span class="tbl">Variation YoY</span> =
+    <span class="fn">DIVIDE</span>(
+        [<span class="tbl">Dépenses Total</span>] - [<span class="tbl">Dépenses N-1</span>],
+        [<span class="tbl">Dépenses N-1</span>], <span class="num">0</span>
+    )
+
+<span class="tbl">Moy Mobile 3M</span> =
+<span class="kw">VAR</span> <span class="dec">P3M</span> = <span class="fn">DATESINPERIOD</span>(
+    <span class="tbl">DIM_Calendrier</span>[Date],
+    <span class="fn">LASTDATE</span>( <span class="tbl">DIM_Calendrier</span>[Date] ),
+    -<span class="num">3</span>, <span class="fn">MONTH</span>
+)
+<span class="kw">RETURN</span> <span class="fn">CALCULATE</span>( [<span class="tbl">Dépenses Total</span>], <span class="dec">P3M</span> ) / <span class="num">3</span>
+
+<span class="tbl">Projection Épargne 12M</span> =
+<span class="kw">VAR</span> <span class="dec">NbMois</span>  = <span class="fn">DISTINCTCOUNT</span>( <span class="tbl">DIM_Calendrier</span>[Mois_Num] )
+<span class="kw">VAR</span> <span class="dec">MoyMens</span> = <span class="fn">DIVIDE</span>( [<span class="tbl">Épargne YTD</span>], <span class="dec">NbMois</span>, <span class="num">0</span> )
+<span class="kw">RETURN</span> <span class="dec">MoyMens</span> * <span class="num">12</span>
+
+<span class="tbl">Épargne Cumulée</span> =
+    <span class="fn">CALCULATE</span>(
+        [<span class="tbl">Solde Net</span>],
+        <span class="fn">FILTER</span>( <span class="fn">ALL</span>( <span class="tbl">DIM_Calendrier</span>[Date] ),
+            <span class="tbl">DIM_Calendrier</span>[Date] <= <span class="fn">MAX</span>( <span class="tbl">DIM_Calendrier</span>[Date] ) )
+    )`,
+
+    /* 4 powerquery.m */
+    `<span class="cmt">// transformation du CSV dans Power Query M</span>
+
+<span class="kw">let</span>
+    Source = Csv.Document(
+        File.Contents(<span class="str">"C:\Data\budget_clean.csv"</span>),
+        [Delimiter=<span class="str">","</span>, Encoding=<span class="num">65001</span>]
+    ),
+
+    Headers = Table.PromoteHeaders(Source, [PromoteAllScalars=<span class="fn">true</span>]),
+
+    Typed = Table.TransformColumnTypes(Headers, {
+        {<span class="str">"Trans_ID"</span>,    Int64.Type},
+        {<span class="str">"Date"</span>,        type date},
+        {<span class="str">"Annee"</span>,       Int64.Type},
+        {<span class="str">"Mois_Num"</span>,    Int64.Type},
+        {<span class="str">"Mois_Nom"</span>,    type text},
+        {<span class="str">"Trimestre"</span>,   type text},
+        {<span class="str">"Annee_Mois"</span>,  type text},
+        {<span class="str">"Description"</span>, type text},
+        {<span class="str">"Categorie"</span>,   type text},
+        {<span class="str">"Type"</span>,        type text},
+        {<span class="str">"Montant"</span>,     type number},
+        {<span class="str">"Montant_Abs"</span>, type number}
+    }),
+
+    NoDup = Table.Distinct(Typed, {<span class="str">"Date"</span>, <span class="str">"Description"</span>, <span class="str">"Montant"</span>}),
+
+    Filtered = Table.SelectRows(NoDup,
+        each [Montant] <> <span class="num">0</span> <span class="fn">and</span> [Description] <> <span class="fn">null</span>),
+
+    WithWeek = Table.AddColumn(Filtered, <span class="str">"Semaine"</span>,
+        each Date.WeekOfYear([Date], Day.Monday), Int64.Type),
+
+    Final = Table.ReorderColumns(WithWeek, {
+        <span class="str">"Trans_ID"</span>, <span class="str">"Date"</span>, <span class="str">"Annee"</span>, <span class="str">"Mois_Num"</span>, <span class="str">"Mois_Nom"</span>,
+        <span class="str">"Trimestre"</span>, <span class="str">"Semaine"</span>, <span class="str">"Annee_Mois"</span>,
+        <span class="str">"Description"</span>, <span class="str">"Categorie"</span>, <span class="str">"Type"</span>, <span class="str">"Montant"</span>, <span class="str">"Montant_Abs"</span>
+    })
+
+<span class="kw">in</span>
+    Final`
+  ]
+};
+
+const active = { p1: 0, p2: 0 };
+
+function toggle(id) {
+  const card  = document.getElementById(id);
+  const body  = document.getElementById(id + '-body');
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.project').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.project-body').forEach(b => b.style.maxHeight = '');
+  if (!isOpen) {
+    card.classList.add('open');
+    render(id);
+  }
+}
+
+function tab(id, idx, el) {
+  active[id] = idx;
+  document.querySelectorAll(`#${id}-tabs .file-tab`).forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  render(id);
+}
+
+function render(id) {
+  document.getElementById(id + '-code').innerHTML = CODE[id][active[id]];
+}
+
+const obs = new IntersectionObserver(
+  entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+  }),
+  { threshold: 0.08 }
+);
+document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
