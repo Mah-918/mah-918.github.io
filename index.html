@@ -94,6 +94,7 @@
     .num-label{font-size:13.5px;color:var(--muted)}
     .kw{color:#9DB0FF}.fn{color:#7FDDE8}.str{color:#9BE3B5}.num{color:#FFB4A8}.cmt{color:#6F7FA5;font-style:italic}.tbl{color:#FFD97A}.dec{color:#FFBE8A}.cls{color:#F5B3D6}.slf{color:#FFB4A8}
 
+.erd{margin:22px 0}.erd img{display:block;width:100%;max-width:520px;height:auto;border:1px solid var(--line);border-radius:14px;background:#fff}.erd figcaption{margin-top:8px;font-size:14px;color:var(--muted)}
     /* contact */
     .contact{margin-top:96px;background:var(--ink);color:#fff}
     .contact .wrap{padding-top:80px;padding-bottom:72px}
@@ -160,20 +161,7 @@
             Modélisation du schéma relationnel avec <strong>5 tables</strong> normalisées (joueurs, équipes, matchs, stats offensives et défensives), puis alimentation de la base avec les données des saisons 2021-22 et 2022-23 — <strong>42 matchs, 27 joueurs, 12 clubs</strong>. Les requêtes progressent en complexité : agrégations simples, CTEs chaînées, window functions (LAG, RANK, SUM cumulé) et ratios par 90 minutes.
           </p>
 
-          <div class="schema">
-<pre>
-players ──── stats ──────── matches
-   │          │                │
-   └──► teams  └─► def_stats ◄─┘
-
-players  : player_id, player_name, nationality, position, team_id
-teams    : team_id, team_name, country, stadium
-matches  : match_id, season, stage, home_team_id, away_team_id, home_goals, away_goals
-stats    : stat_id, player_id, match_id, goals, assists, shots, minutes_played ...
-def_stats: def_id, team_id, match_id, tackles_won, clean_sheet, possession_pct ...
-</pre>
-          </div>
-
+          <figure class="erd"><img src="img/schema-champions-league.png" alt="Schéma de la base de données : cinq tables reliées (teams, players, matches, stats, def_stats)" loading="lazy"><figcaption>Schéma de la base : 5 tables normalisées, reliées par clés étrangères.</figcaption></figure>
           <div class="file-tabs" id="p1-tabs">
             <div class="file-tab on"  onclick="tab('p1',0,this)">setup.sql</div>
             <div class="file-tab"     onclick="tab('p1',1,this)">top_buteurs.sql</div>
