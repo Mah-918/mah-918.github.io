@@ -95,6 +95,14 @@
     .kw{color:#9DB0FF}.fn{color:#7FDDE8}.str{color:#9BE3B5}.num{color:#FFB4A8}.cmt{color:#6F7FA5;font-style:italic}.tbl{color:#FFD97A}.dec{color:#FFBE8A}.cls{color:#F5B3D6}.slf{color:#FFB4A8}
 
 .erd{margin:22px 0}.erd img{display:block;width:100%;max-width:520px;height:auto;border:1px solid var(--line);border-radius:14px;background:#fff}.erd figcaption{margin-top:8px;font-size:14px;color:var(--muted)}
+.source{max-width:700px;font-size:14.5px;color:var(--muted);margin-bottom:8px}.source a{color:var(--blue-deep)}
+    .what-i-did code{font-family:'JetBrains Mono',monospace;font-size:.88em;background:var(--blue-soft);padding:1px 6px;border-radius:5px}
+    .result{display:none;margin:0 0 24px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px;overflow:auto;max-height:420px}
+    .rtitle{font-weight:600;font-size:15px;margin-bottom:10px}
+    .result table{border-collapse:collapse;font-size:14px;min-width:100%}
+    .result th{text-align:left;font-weight:600;color:var(--muted);padding:6px 14px 6px 0;border-bottom:1px solid var(--line);white-space:nowrap}
+    .result td{padding:6px 14px 6px 0;border-bottom:1px solid #EDF0F6;white-space:nowrap}
+    .rcount{margin-top:10px;font-size:13px;color:var(--muted)}
     /* contact */
     .contact{margin-top:96px;background:var(--ink);color:#fff}
     .contact .wrap{padding-top:80px;padding-bottom:72px}
@@ -150,36 +158,33 @@
         <div class="project-top" role="button" tabindex="0" aria-expanded="false" aria-controls="p1-body" onclick="toggle('p1')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle('p1')}">
           <div>
             <div class="project-chips"><span class="chip">SQL</span><span class="chip">PostgreSQL</span><span class="chip">Football</span></div>
-            <div class="project-title">Analyse de la Champions League en SQL</div>
-            <div class="project-desc">Une base de données sur deux saisons pour répondre à des questions concrètes : qui marque le plus par 90 minutes, quelle défense encaisse le moins, comment un joueur progresse d'une saison à l'autre.</div>
+            <div class="project-title">Analyse de la phase finale de la Champions League en SQL</div>
+            <div class="project-desc">Une base PostgreSQL sur les deux dernières saisons complètes : confrontations, bilan des équipes, avantage du terrain, meilleurs buteurs et évolution des clubs d'une saison à l'autre.</div>
           </div>
-          <div class="key"><b>42</b><small>matchs analysés</small></div>
+          <div class="key"><b>58</b><small>matchs analysés</small></div>
           <div class="project-arrow" aria-hidden="true">+</div>
         </div>
         <div class="project-body" id="p1-body"><div class="project-inner">
           <p class="what-i-did">
-            Modélisation du schéma relationnel avec <strong>5 tables</strong> normalisées (joueurs, équipes, matchs, stats offensives et défensives), puis alimentation de la base avec les données des saisons 2021-22 et 2022-23 — <strong>42 matchs, 27 joueurs, 12 clubs</strong>. Les requêtes progressent en complexité : agrégations simples, CTEs chaînées, window functions (LAG, RANK, SUM cumulé) et ratios par 90 minutes.
+            Ce projet explore, à partir de vraies données, ce qui distingue les équipes en phase finale. J'ai modélisé la <strong>phase à élimination directe</strong> des deux dernières saisons complètes de Champions League : <strong>58 matchs</strong> (huitièmes, quarts, demi-finales et finale), <strong>25 clubs</strong> et les <strong>19 meilleurs buteurs</strong> des deux éditions, dans une base PostgreSQL à 4 tables.
           </p>
-
-          <figure class="erd"><img src="img/schema-champions-league.png" alt="Schéma de la base de données : cinq tables reliées (teams, players, matches, stats, def_stats)" loading="lazy"><figcaption>Schéma de la base : 5 tables normalisées, reliées par clés étrangères.</figcaption></figure>
-          <div class="file-tabs" id="p1-tabs">
-            <div class="file-tab on"  onclick="tab('p1',0,this)">setup.sql</div>
-            <div class="file-tab"     onclick="tab('p1',1,this)">top_buteurs.sql</div>
-            <div class="file-tab"     onclick="tab('p1',2,this)">progressions.sql</div>
-            <div class="file-tab"     onclick="tab('p1',3,this)">defense.sql</div>
-            <div class="file-tab"     onclick="tab('p1',4,this)">saison_vs_saison.sql</div>
-            <div class="file-tab"     onclick="tab('p1',5,this)">profil_joueur.sql</div>
-          </div>
+          <p class="what-i-did">
+            Les six requêtes montent en difficulté : CTE pour reconstituer chaque confrontation, <code>UNION ALL</code> pour compter les buts des deux côtés d'un match, fonctions de fenêtrage (<code>RANK</code>, <code>LAG</code>, cumul avec <code>SUM OVER</code>) et agrégats filtrés. Les résultats s'affichent sous chaque requête.
+          </p>
+          <p class="source">Sources : résultats et buteurs d'après les pages Wikipédia des saisons <a href="https://en.wikipedia.org/wiki/2021%E2%80%9322_UEFA_Champions_League_knockout_phase">2021-22</a> et <a href="https://en.wikipedia.org/wiki/2022%E2%80%9323_UEFA_Champions_League_knockout_phase">2022-23</a>. Le classement des buteurs inclut la phase de groupes (qualifications exclues), alors que la table des matchs ne contient que la phase finale. Les finales sont jouées sur terrain neutre.</p>
+          <figure class="erd"><img src="img/schema-champions-league.png" alt="Schéma de la base de données : quatre tables reliées (teams, players, matches, top_buteurs)" loading="lazy"><figcaption>Schéma de la base : 4 tables reliées par clés étrangères.</figcaption></figure>
+          <div class="file-tabs" id="p1-tabs"><div class="file-tab on" onclick="tab('p1',0,this)">setup.sql</div><div class="file-tab" onclick="tab('p1',1,this)">resultats.sql</div><div class="file-tab" onclick="tab('p1',2,this)">bilan_equipes.sql</div><div class="file-tab" onclick="tab('p1',3,this)">avantage_domicile.sql</div><div class="file-tab" onclick="tab('p1',4,this)">buteurs.sql</div><div class="file-tab" onclick="tab('p1',5,this)">evolution_clubs.sql</div><div class="file-tab" onclick="tab('p1',6,this)">parcours_real.sql</div></div>
           <div class="code-block"><pre id="p1-code"></pre></div>
-
+          <div class="result" id="p1-result"></div>
           <div class="numbers">
-            <div class="num-box"><div class="num-val">42</div><div class="num-label">matchs UCL</div></div>
-            <div class="num-box"><div class="num-val">27</div><div class="num-label">joueurs</div></div>
-            <div class="num-box"><div class="num-val">5</div><div class="num-label">tables SQL</div></div>
+            <div class="num-box"><div class="num-val">58</div><div class="num-label">matchs</div></div>
+            <div class="num-box"><div class="num-val">25</div><div class="num-label">clubs</div></div>
+            <div class="num-box"><div class="num-val">19</div><div class="num-label">buteurs</div></div>
             <div class="num-box"><div class="num-val">6</div><div class="num-label">requêtes</div></div>
           </div>
         </div></div>
       </div>
+
       <div class="project" id="p2">
         <div class="project-top" role="button" tabindex="0" aria-expanded="false" aria-controls="p2-body" onclick="toggle('p2')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle('p2')}">
           <div>
@@ -297,276 +302,314 @@ DIM_Budget        : Budget_ID, Mois_Num, Categorie, Montant_Prevu
 <script>
 const CODE = {
   p1: [
-    /* 0 setup.sql */
-    `<span class="cmt">-- création des tables et des index</span>
+    `<span class="cmt">-- création des tables et chargement des données (phase à élimination directe 2021-22 et 2022-23)</span>
 
-<span class="kw">DROP TABLE IF EXISTS</span> stats, def_stats, matches, players, teams <span class="kw">CASCADE</span>;
+<span class="kw">DROP TABLE IF EXISTS</span> top_buteurs, matches, players, teams <span class="kw">CASCADE</span>;
 
-<span class="kw">CREATE TABLE</span> <span class="tbl">teams</span> (
-    team_id    <span class="fn">SERIAL PRIMARY KEY</span>,
-    team_name  <span class="fn">VARCHAR</span>(<span class="num">60</span>) <span class="kw">NOT NULL</span>,
-    country    <span class="fn">VARCHAR</span>(<span class="num">40</span>) <span class="kw">NOT NULL</span>,
-    founded    <span class="fn">INT</span>,
-    stadium    <span class="fn">VARCHAR</span>(<span class="num">80</span>)
+<span class="kw">CREATE TABLE</span> teams (
+    team_id    <span class="fn">SERIAL</span> <span class="kw">PRIMARY KEY</span>,
+    team_name  <span class="fn">VARCHAR</span>(<span class="num">40</span>) <span class="kw">NOT NULL</span> <span class="kw">UNIQUE</span>,
+    country    <span class="fn">VARCHAR</span>(<span class="num">30</span>) <span class="kw">NOT NULL</span>
 );
 
-<span class="kw">CREATE TABLE</span> <span class="tbl">players</span> (
-    player_id   <span class="fn">SERIAL PRIMARY KEY</span>,
-    player_name <span class="fn">VARCHAR</span>(<span class="num">60</span>) <span class="kw">NOT NULL</span>,
-    nationality <span class="fn">VARCHAR</span>(<span class="num">40</span>) <span class="kw">NOT NULL</span>,
-    position    <span class="fn">VARCHAR</span>(<span class="num">5</span>)  <span class="kw">NOT NULL CHECK</span> (position <span class="kw">IN</span> (<span class="str">'FW'</span>,<span class="str">'MF'</span>,<span class="str">'DF'</span>,<span class="str">'GK'</span>)),
-    birth_year  <span class="fn">INT</span>,
-    team_id     <span class="fn">INT REFERENCES</span> <span class="tbl">teams</span>(team_id)
+<span class="kw">CREATE TABLE</span> players (
+    player_id   <span class="fn">SERIAL</span> <span class="kw">PRIMARY KEY</span>,
+    player_name <span class="fn">VARCHAR</span>(<span class="num">40</span>) <span class="kw">NOT NULL</span> <span class="kw">UNIQUE</span>
 );
 
-<span class="kw">CREATE TABLE</span> <span class="tbl">matches</span> (
-    match_id     <span class="fn">SERIAL PRIMARY KEY</span>,
-    season       <span class="fn">VARCHAR</span>(<span class="num">10</span>) <span class="kw">NOT NULL</span>,
-    stage        <span class="fn">VARCHAR</span>(<span class="num">30</span>) <span class="kw">NOT NULL</span>,
-    match_date   <span class="fn">DATE</span>        <span class="kw">NOT NULL</span>,
-    home_team_id <span class="fn">INT REFERENCES</span> <span class="tbl">teams</span>(team_id),
-    away_team_id <span class="fn">INT REFERENCES</span> <span class="tbl">teams</span>(team_id),
-    home_goals   <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
-    away_goals   <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
-    attendance   <span class="fn">INT</span>
+<span class="kw">CREATE TABLE</span> matches (
+    match_id     <span class="fn">SERIAL</span> <span class="kw">PRIMARY KEY</span>,
+    season       <span class="fn">VARCHAR</span>(<span class="num">7</span>)  <span class="kw">NOT NULL</span>,
+    stage        <span class="fn">VARCHAR</span>(<span class="num">15</span>) <span class="kw">NOT NULL</span> <span class="kw">CHECK</span> (stage <span class="kw">IN</span> (<span class="str">&#x27;Huitièmes&#x27;</span>,<span class="str">&#x27;Quarts&#x27;</span>,<span class="str">&#x27;Demi-finales&#x27;</span>,<span class="str">&#x27;Finale&#x27;</span>)),
+    tie_code     <span class="fn">VARCHAR</span>(<span class="num">3</span>)  <span class="kw">NOT NULL</span>,
+    leg          <span class="fn">VARCHAR</span>(<span class="num">7</span>)  <span class="kw">NOT NULL</span> <span class="kw">CHECK</span> (leg <span class="kw">IN</span> (<span class="str">&#x27;Aller&#x27;</span>,<span class="str">&#x27;Retour&#x27;</span>,<span class="str">&#x27;Finale&#x27;</span>)),
+    home_team_id <span class="fn">INT</span> <span class="kw">NOT NULL</span> <span class="kw">REFERENCES</span> teams(team_id),
+    away_team_id <span class="fn">INT</span> <span class="kw">NOT NULL</span> <span class="kw">REFERENCES</span> teams(team_id),
+    home_goals   <span class="fn">INT</span> <span class="kw">NOT NULL</span>,
+    away_goals   <span class="fn">INT</span> <span class="kw">NOT NULL</span>,
+    extra_time   <span class="fn">BOOLEAN</span> <span class="kw">NOT NULL</span> <span class="kw">DEFAULT</span> <span class="kw">FALSE</span>
 );
 
-<span class="kw">CREATE TABLE</span> <span class="tbl">stats</span> (
-    stat_id         <span class="fn">SERIAL PRIMARY KEY</span>,
-    player_id       <span class="fn">INT REFERENCES</span> <span class="tbl">players</span>(player_id),
-    match_id        <span class="fn">INT REFERENCES</span> <span class="tbl">matches</span>(match_id),
-    goals           <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
-    assists         <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
-    shots           <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
-    shots_on_target <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
-    key_passes      <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
-    dribbles_won    <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
-    minutes_played  <span class="fn">INT DEFAULT</span> <span class="num">90</span>
+<span class="kw">CREATE TABLE</span> top_buteurs (
+    season    <span class="fn">VARCHAR</span>(<span class="num">7</span>) <span class="kw">NOT NULL</span>,
+    player_id <span class="fn">INT</span> <span class="kw">NOT NULL</span> <span class="kw">REFERENCES</span> players(player_id),
+    team_id   <span class="fn">INT</span> <span class="kw">NOT NULL</span> <span class="kw">REFERENCES</span> teams(team_id),
+    goals     <span class="fn">INT</span> <span class="kw">NOT NULL</span>,
+    <span class="kw">PRIMARY KEY</span> (season, player_id)
 );
 
-<span class="kw">CREATE TABLE</span> <span class="tbl">def_stats</span> (
-    def_id          <span class="fn">SERIAL PRIMARY KEY</span>,
-    team_id         <span class="fn">INT REFERENCES</span> <span class="tbl">teams</span>(team_id),
-    match_id        <span class="fn">INT REFERENCES</span> <span class="tbl">matches</span>(match_id),
-    tackles_won     <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
-    interceptions   <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
-    clearances      <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
-    fouls_committed <span class="fn">INT DEFAULT</span> <span class="num">0</span>,
-    possession_pct  <span class="fn">NUMERIC</span>(<span class="num">4</span>,<span class="num">1</span>),
-    goals_conceded  <span class="fn">INT DEFAULT</span> <span class="num">0</span>
-);
+<span class="kw">CREATE INDEX</span> idx_matches_season <span class="kw">ON</span> matches(season);
+<span class="kw">CREATE INDEX</span> idx_matches_tie    <span class="kw">ON</span> matches(season, tie_code);
 
-<span class="kw">CREATE INDEX</span> idx_stats_player   <span class="kw">ON</span> <span class="tbl">stats</span>(player_id);
-<span class="kw">CREATE INDEX</span> idx_stats_match    <span class="kw">ON</span> <span class="tbl">stats</span>(match_id);
-<span class="kw">CREATE INDEX</span> idx_matches_season <span class="kw">ON</span> <span class="tbl">matches</span>(season);
+<span class="kw">INSERT INTO</span> teams (team_name, country) <span class="kw">VALUES</span>
+    (<span class="str">&#x27;Red Bull Salzburg&#x27;</span>, <span class="str">&#x27;Autriche&#x27;</span>),
+    (<span class="str">&#x27;Bayern Munich&#x27;</span>, <span class="str">&#x27;Allemagne&#x27;</span>),
+    (<span class="str">&#x27;Sporting CP&#x27;</span>, <span class="str">&#x27;Portugal&#x27;</span>),
+    (<span class="str">&#x27;Manchester City&#x27;</span>, <span class="str">&#x27;Angleterre&#x27;</span>),
+    (<span class="str">&#x27;Benfica&#x27;</span>, <span class="str">&#x27;Portugal&#x27;</span>),
+    (<span class="str">&#x27;Ajax&#x27;</span>, <span class="str">&#x27;Pays-Bas&#x27;</span>),
+    (<span class="str">&#x27;Chelsea&#x27;</span>, <span class="str">&#x27;Angleterre&#x27;</span>),
+    (<span class="str">&#x27;Lille&#x27;</span>, <span class="str">&#x27;France&#x27;</span>),
+    (<span class="str">&#x27;Atlético Madrid&#x27;</span>, <span class="str">&#x27;Espagne&#x27;</span>),
+    (<span class="str">&#x27;Manchester United&#x27;</span>, <span class="str">&#x27;Angleterre&#x27;</span>),
+    (<span class="str">&#x27;Villarreal&#x27;</span>, <span class="str">&#x27;Espagne&#x27;</span>),
+    (<span class="str">&#x27;Juventus&#x27;</span>, <span class="str">&#x27;Italie&#x27;</span>),
+    (<span class="str">&#x27;Inter Milan&#x27;</span>, <span class="str">&#x27;Italie&#x27;</span>),
+    (<span class="str">&#x27;Liverpool&#x27;</span>, <span class="str">&#x27;Angleterre&#x27;</span>),
+    (<span class="str">&#x27;Paris Saint-Germain&#x27;</span>, <span class="str">&#x27;France&#x27;</span>),
+    (<span class="str">&#x27;Real Madrid&#x27;</span>, <span class="str">&#x27;Espagne&#x27;</span>),
+    (<span class="str">&#x27;RB Leipzig&#x27;</span>, <span class="str">&#x27;Allemagne&#x27;</span>),
+    (<span class="str">&#x27;Club Bruges&#x27;</span>, <span class="str">&#x27;Belgique&#x27;</span>),
+    (<span class="str">&#x27;AC Milan&#x27;</span>, <span class="str">&#x27;Italie&#x27;</span>),
+    (<span class="str">&#x27;Tottenham Hotspur&#x27;</span>, <span class="str">&#x27;Angleterre&#x27;</span>),
+    (<span class="str">&#x27;Eintracht Francfort&#x27;</span>, <span class="str">&#x27;Allemagne&#x27;</span>),
+    (<span class="str">&#x27;Napoli&#x27;</span>, <span class="str">&#x27;Italie&#x27;</span>),
+    (<span class="str">&#x27;Borussia Dortmund&#x27;</span>, <span class="str">&#x27;Allemagne&#x27;</span>),
+    (<span class="str">&#x27;FC Porto&#x27;</span>, <span class="str">&#x27;Portugal&#x27;</span>),
+    (<span class="str">&#x27;FC Barcelone&#x27;</span>, <span class="str">&#x27;Espagne&#x27;</span>);
 
-<span class="cmt">-- vue résumé par saison</span>
-<span class="kw">CREATE OR REPLACE VIEW</span> <span class="tbl">season_summary</span> <span class="kw">AS</span>
-<span class="kw">SELECT</span>
-    m.season,
-    <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> m.match_id)                       <span class="kw">AS</span> nb_matchs,
-    <span class="fn">SUM</span>(m.home_goals + m.away_goals)                  <span class="kw">AS</span> total_buts,
-    <span class="fn">ROUND</span>(<span class="fn">AVG</span>(m.home_goals+m.away_goals)::NUMERIC,<span class="num">2</span>) <span class="kw">AS</span> moy_buts_match
-<span class="kw">FROM</span> <span class="tbl">matches</span> m
-<span class="kw">JOIN</span> <span class="tbl">stats</span>   s <span class="kw">ON</span> m.match_id = s.match_id
-<span class="kw">GROUP BY</span> m.season;`,
+<span class="kw">INSERT INTO</span> players (player_name) <span class="kw">VALUES</span>
+    (<span class="str">&#x27;Karim Benzema&#x27;</span>),
+    (<span class="str">&#x27;Robert Lewandowski&#x27;</span>),
+    (<span class="str">&#x27;Sébastien Haller&#x27;</span>),
+    (<span class="str">&#x27;Mohamed Salah&#x27;</span>),
+    (<span class="str">&#x27;Christopher Nkunku&#x27;</span>),
+    (<span class="str">&#x27;Riyad Mahrez&#x27;</span>),
+    (<span class="str">&#x27;Cristiano Ronaldo&#x27;</span>),
+    (<span class="str">&#x27;Darwin Núñez&#x27;</span>),
+    (<span class="str">&#x27;Kylian Mbappé&#x27;</span>),
+    (<span class="str">&#x27;Leroy Sané&#x27;</span>),
+    (<span class="str">&#x27;Arnaut Danjuma&#x27;</span>),
+    (<span class="str">&#x27;Erling Haaland&#x27;</span>),
+    (<span class="str">&#x27;Vinícius Júnior&#x27;</span>),
+    (<span class="str">&#x27;João Mário&#x27;</span>),
+    (<span class="str">&#x27;Victor Osimhen&#x27;</span>),
+    (<span class="str">&#x27;Mehdi Taremi&#x27;</span>),
+    (<span class="str">&#x27;Rodrygo&#x27;</span>),
+    (<span class="str">&#x27;Rafa Silva&#x27;</span>),
+    (<span class="str">&#x27;Olivier Giroud&#x27;</span>);
 
-    /* 1 top_buteurs.sql */
-    `<span class="cmt">-- top 10 buteurs, avec leurs ratios par match et par 90 min</span>
+<span class="kw">INSERT INTO</span> matches (season, stage, tie_code, leg, home_team_id, away_team_id, home_goals, away_goals, extra_time) <span class="kw">VALUES</span>
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H1&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Red Bull Salzburg&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Bayern Munich&#x27;</span>), <span class="num">1</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H1&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Bayern Munich&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Red Bull Salzburg&#x27;</span>), <span class="num">7</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H2&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Sporting CP&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), <span class="num">0</span>, <span class="num">5</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H2&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Sporting CP&#x27;</span>), <span class="num">0</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H3&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Benfica&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Ajax&#x27;</span>), <span class="num">2</span>, <span class="num">2</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H3&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Ajax&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Benfica&#x27;</span>), <span class="num">0</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H4&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Chelsea&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Lille&#x27;</span>), <span class="num">2</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H4&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Lille&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Chelsea&#x27;</span>), <span class="num">1</span>, <span class="num">2</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H5&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Atlético Madrid&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester United&#x27;</span>), <span class="num">1</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H5&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester United&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Atlético Madrid&#x27;</span>), <span class="num">0</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H6&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Villarreal&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Juventus&#x27;</span>), <span class="num">1</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H6&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Juventus&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Villarreal&#x27;</span>), <span class="num">0</span>, <span class="num">3</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H7&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Inter Milan&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Liverpool&#x27;</span>), <span class="num">0</span>, <span class="num">2</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H7&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Liverpool&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Inter Milan&#x27;</span>), <span class="num">0</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H8&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Paris Saint-Germain&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), <span class="num">1</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H8&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Paris Saint-Germain&#x27;</span>), <span class="num">3</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q1&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Chelsea&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), <span class="num">1</span>, <span class="num">3</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q1&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Chelsea&#x27;</span>), <span class="num">2</span>, <span class="num">3</span>, <span class="kw">TRUE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q2&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Atlético Madrid&#x27;</span>), <span class="num">1</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q2&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Atlético Madrid&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), <span class="num">0</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q3&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Villarreal&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Bayern Munich&#x27;</span>), <span class="num">1</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q3&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Bayern Munich&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Villarreal&#x27;</span>), <span class="num">1</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q4&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Benfica&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Liverpool&#x27;</span>), <span class="num">1</span>, <span class="num">3</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q4&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Liverpool&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Benfica&#x27;</span>), <span class="num">3</span>, <span class="num">3</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Demi-finales&#x27;</span>, <span class="str">&#x27;D1&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), <span class="num">4</span>, <span class="num">3</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Demi-finales&#x27;</span>, <span class="str">&#x27;D1&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), <span class="num">3</span>, <span class="num">1</span>, <span class="kw">TRUE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Demi-finales&#x27;</span>, <span class="str">&#x27;D2&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Liverpool&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Villarreal&#x27;</span>), <span class="num">2</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Demi-finales&#x27;</span>, <span class="str">&#x27;D2&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Villarreal&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Liverpool&#x27;</span>), <span class="num">2</span>, <span class="num">3</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, <span class="str">&#x27;Finale&#x27;</span>, <span class="str">&#x27;F&#x27;</span>, <span class="str">&#x27;Finale&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Liverpool&#x27;</span>), <span class="num">1</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H1&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;RB Leipzig&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), <span class="num">1</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H1&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;RB Leipzig&#x27;</span>), <span class="num">7</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H2&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Club Bruges&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Benfica&#x27;</span>), <span class="num">0</span>, <span class="num">2</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H2&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Benfica&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Club Bruges&#x27;</span>), <span class="num">5</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H3&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Liverpool&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), <span class="num">2</span>, <span class="num">5</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H3&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Liverpool&#x27;</span>), <span class="num">1</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H4&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;AC Milan&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Tottenham Hotspur&#x27;</span>), <span class="num">1</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H4&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Tottenham Hotspur&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;AC Milan&#x27;</span>), <span class="num">0</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H5&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Eintracht Francfort&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Napoli&#x27;</span>), <span class="num">0</span>, <span class="num">2</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H5&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Napoli&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Eintracht Francfort&#x27;</span>), <span class="num">3</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H6&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Borussia Dortmund&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Chelsea&#x27;</span>), <span class="num">1</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H6&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Chelsea&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Borussia Dortmund&#x27;</span>), <span class="num">2</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H7&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Inter Milan&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;FC Porto&#x27;</span>), <span class="num">1</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H7&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;FC Porto&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Inter Milan&#x27;</span>), <span class="num">0</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H8&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Paris Saint-Germain&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Bayern Munich&#x27;</span>), <span class="num">0</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Huitièmes&#x27;</span>, <span class="str">&#x27;H8&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Bayern Munich&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Paris Saint-Germain&#x27;</span>), <span class="num">2</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q1&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Chelsea&#x27;</span>), <span class="num">2</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q1&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Chelsea&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), <span class="num">0</span>, <span class="num">2</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q2&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Benfica&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Inter Milan&#x27;</span>), <span class="num">0</span>, <span class="num">2</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q2&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Inter Milan&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Benfica&#x27;</span>), <span class="num">3</span>, <span class="num">3</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q3&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Bayern Munich&#x27;</span>), <span class="num">3</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q3&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Bayern Munich&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), <span class="num">1</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q4&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;AC Milan&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Napoli&#x27;</span>), <span class="num">1</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Quarts&#x27;</span>, <span class="str">&#x27;Q4&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Napoli&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;AC Milan&#x27;</span>), <span class="num">1</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Demi-finales&#x27;</span>, <span class="str">&#x27;D1&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;AC Milan&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Inter Milan&#x27;</span>), <span class="num">0</span>, <span class="num">2</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Demi-finales&#x27;</span>, <span class="str">&#x27;D1&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Inter Milan&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;AC Milan&#x27;</span>), <span class="num">1</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Demi-finales&#x27;</span>, <span class="str">&#x27;D2&#x27;</span>, <span class="str">&#x27;Aller&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), <span class="num">1</span>, <span class="num">1</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Demi-finales&#x27;</span>, <span class="str">&#x27;D2&#x27;</span>, <span class="str">&#x27;Retour&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), <span class="num">4</span>, <span class="num">0</span>, <span class="kw">FALSE</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, <span class="str">&#x27;Finale&#x27;</span>, <span class="str">&#x27;F&#x27;</span>, <span class="str">&#x27;Finale&#x27;</span>, (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Inter Milan&#x27;</span>), <span class="num">1</span>, <span class="num">0</span>, <span class="kw">FALSE</span>);
 
-<span class="kw">WITH</span> <span class="tbl">totaux</span> <span class="kw">AS</span> (
-    <span class="kw">SELECT</span>
-        p.player_name,
-        p.nationality,
-        p.position,
-        t.team_name,
-        <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> s.match_id)                              <span class="kw">AS</span> matchs,
-        <span class="fn">SUM</span>(s.goals)                                             <span class="kw">AS</span> buts,
-        <span class="fn">SUM</span>(s.assists)                                           <span class="kw">AS</span> passes_dec,
-        <span class="fn">SUM</span>(s.goals) + <span class="fn">SUM</span>(s.assists)                          <span class="kw">AS</span> contributions,
-        <span class="fn">SUM</span>(s.shots)                                             <span class="kw">AS</span> tirs,
-        <span class="fn">SUM</span>(s.shots_on_target)                                   <span class="kw">AS</span> tirs_cadres,
-        <span class="fn">SUM</span>(s.minutes_played)                                    <span class="kw">AS</span> minutes,
-        <span class="fn">ROUND</span>(<span class="fn">SUM</span>(s.goals)::NUMERIC
-              / <span class="fn">NULLIF</span>(<span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> s.match_id), <span class="num">0</span>), <span class="num">2</span>)   <span class="kw">AS</span> buts_par_match,
-        <span class="fn">ROUND</span>(<span class="fn">SUM</span>(s.goals)::NUMERIC
-              / <span class="fn">NULLIF</span>(<span class="fn">SUM</span>(s.minutes_played), <span class="num">0</span>) * <span class="num">90</span>, <span class="num">2</span>)  <span class="kw">AS</span> buts_p90,
-        <span class="fn">ROUND</span>(<span class="fn">SUM</span>(s.shots_on_target)::NUMERIC
-              / <span class="fn">NULLIF</span>(<span class="fn">SUM</span>(s.shots), <span class="num">0</span>) * <span class="num">100</span>, <span class="num">1</span>)           <span class="kw">AS</span> precision_pct
-    <span class="kw">FROM</span> <span class="tbl">players</span> p
-    <span class="kw">JOIN</span> <span class="tbl">stats</span>   s <span class="kw">ON</span> p.player_id = s.player_id
-    <span class="kw">JOIN</span> <span class="tbl">matches</span> m <span class="kw">ON</span> s.match_id  = m.match_id
-    <span class="kw">JOIN</span> <span class="tbl">teams</span>   t <span class="kw">ON</span> p.team_id   = t.team_id
-    <span class="kw">GROUP BY</span> p.player_id, p.player_name, p.nationality, p.position, t.team_name
-    <span class="kw">HAVING</span> <span class="fn">SUM</span>(s.goals) >= <span class="num">1</span>
+<span class="kw">INSERT INTO</span> top_buteurs (season, player_id, team_id, goals) <span class="kw">VALUES</span>
+    (<span class="str">&#x27;2021-22&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Karim Benzema&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), <span class="num">15</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Robert Lewandowski&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Bayern Munich&#x27;</span>), <span class="num">13</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Sébastien Haller&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Ajax&#x27;</span>), <span class="num">11</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Mohamed Salah&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Liverpool&#x27;</span>), <span class="num">8</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Christopher Nkunku&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;RB Leipzig&#x27;</span>), <span class="num">7</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Riyad Mahrez&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), <span class="num">7</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Cristiano Ronaldo&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester United&#x27;</span>), <span class="num">6</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Darwin Núñez&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Benfica&#x27;</span>), <span class="num">6</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Kylian Mbappé&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Paris Saint-Germain&#x27;</span>), <span class="num">6</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Leroy Sané&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Bayern Munich&#x27;</span>), <span class="num">6</span>),
+    (<span class="str">&#x27;2021-22&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Arnaut Danjuma&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Villarreal&#x27;</span>), <span class="num">6</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Erling Haaland&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Manchester City&#x27;</span>), <span class="num">12</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Mohamed Salah&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Liverpool&#x27;</span>), <span class="num">8</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Kylian Mbappé&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Paris Saint-Germain&#x27;</span>), <span class="num">7</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Vinícius Júnior&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), <span class="num">7</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;João Mário&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Benfica&#x27;</span>), <span class="num">6</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Victor Osimhen&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Napoli&#x27;</span>), <span class="num">5</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Robert Lewandowski&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;FC Barcelone&#x27;</span>), <span class="num">5</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Mehdi Taremi&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;FC Porto&#x27;</span>), <span class="num">5</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Rodrygo&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Real Madrid&#x27;</span>), <span class="num">5</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Rafa Silva&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;Benfica&#x27;</span>), <span class="num">5</span>),
+    (<span class="str">&#x27;2022-23&#x27;</span>, (<span class="kw">SELECT</span> player_id <span class="kw">FROM</span> players <span class="kw">WHERE</span> player_name = <span class="str">&#x27;Olivier Giroud&#x27;</span>), (<span class="kw">SELECT</span> team_id <span class="kw">FROM</span> teams <span class="kw">WHERE</span> team_name = <span class="str">&#x27;AC Milan&#x27;</span>), <span class="num">5</span>);
+`,
+    `<span class="cmt">-- résultats de la phase finale : un match par ligne, avec le vainqueur de chaque confrontation</span>
+
+<span class="kw">WITH</span> confrontations <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> m.season, m.stage, m.tie_code,
+           t.team_name,
+           <span class="fn">SUM</span>(<span class="kw">CASE</span> <span class="kw">WHEN</span> m.home_team_id = t.team_id <span class="kw">THEN</span> m.home_goals <span class="kw">ELSE</span> m.away_goals <span class="kw">END</span>) <span class="kw">AS</span> buts_pour,
+           <span class="fn">SUM</span>(<span class="kw">CASE</span> <span class="kw">WHEN</span> m.home_team_id = t.team_id <span class="kw">THEN</span> m.away_goals <span class="kw">ELSE</span> m.home_goals <span class="kw">END</span>) <span class="kw">AS</span> buts_contre
+    <span class="kw">FROM</span> matches m
+    <span class="kw">JOIN</span> teams t <span class="kw">ON</span> t.team_id <span class="kw">IN</span> (m.home_team_id, m.away_team_id)
+    <span class="kw">GROUP BY</span> m.season, m.stage, m.tie_code, t.team_name
 )
-<span class="kw">SELECT</span>
-    <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> buts <span class="kw">DESC</span>) <span class="kw">AS</span> rang,
-    player_name, nationality, position, team_name,
-    matchs, buts, passes_dec, contributions,
-    buts_par_match, buts_p90, precision_pct
-<span class="kw">FROM</span> <span class="tbl">totaux</span>
-<span class="kw">ORDER BY</span> buts <span class="kw">DESC</span>
-<span class="kw">LIMIT</span> <span class="num">10</span>;`,
+<span class="kw">SELECT</span> season, stage <span class="kw">AS</span> tour, team_name <span class="kw">AS</span> equipe,
+       buts_pour || <span class="str">&#x27; - &#x27;</span> || buts_contre <span class="kw">AS</span> cumul
+<span class="kw">FROM</span> confrontations c
+<span class="kw">WHERE</span> buts_pour &gt; buts_contre <span class="kw">AND</span> stage &lt;&gt; <span class="str">&#x27;Finale&#x27;</span>
+<span class="kw">ORDER BY</span> season,
+         <span class="kw">CASE</span> stage <span class="kw">WHEN</span> <span class="str">&#x27;Huitièmes&#x27;</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">WHEN</span> <span class="str">&#x27;Quarts&#x27;</span> <span class="kw">THEN</span> <span class="num">2</span> <span class="kw">ELSE</span> <span class="num">3</span> <span class="kw">END</span>,
+         tie_code;
+`,
+    `<span class="cmt">-- bilan des équipes sur chaque saison (les 5 meilleures) : buts marqués, encaissés, différence et rang</span>
 
-    /* 2 progressions.sql */
-    `<span class="cmt">-- évolution joueur par joueur entre les deux saisons
--- LAG pour comparer, SUM cumulé, moyenne mobile</span>
-
-<span class="kw">WITH</span> <span class="tbl">par_saison</span> <span class="kw">AS</span> (
-    <span class="kw">SELECT</span>
-        p.player_name,
-        m.season,
-        <span class="fn">SUM</span>(s.goals)               <span class="kw">AS</span> buts,
-        <span class="fn">SUM</span>(s.assists)             <span class="kw">AS</span> passes_dec,
-        <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> s.match_id) <span class="kw">AS</span> matchs
-    <span class="kw">FROM</span> <span class="tbl">players</span> p
-    <span class="kw">JOIN</span> <span class="tbl">stats</span>   s <span class="kw">ON</span> p.player_id = s.player_id
-    <span class="kw">JOIN</span> <span class="tbl">matches</span> m <span class="kw">ON</span> s.match_id  = m.match_id
-    <span class="kw">GROUP BY</span> p.player_name, m.season
+<span class="kw">WITH</span> lignes <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> season, home_team_id <span class="kw">AS</span> team_id, home_goals <span class="kw">AS</span> pour, away_goals <span class="kw">AS</span> contre <span class="kw">FROM</span> matches
+    <span class="kw">UNION ALL</span>
+    <span class="kw">SELECT</span> season, away_team_id, away_goals, home_goals <span class="kw">FROM</span> matches
+),
+bilan <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> season, team_id,
+           <span class="fn">COUNT</span>(*)         <span class="kw">AS</span> matchs,
+           <span class="fn">SUM</span>(pour)        <span class="kw">AS</span> buts_pour,
+           <span class="fn">SUM</span>(contre)      <span class="kw">AS</span> buts_contre,
+           <span class="fn">SUM</span>(pour - contre) <span class="kw">AS</span> difference
+    <span class="kw">FROM</span> lignes
+    <span class="kw">GROUP BY</span> season, team_id
 )
-<span class="kw">SELECT</span>
-    player_name,
-    season,
-    buts,
-    passes_dec,
+<span class="kw">SELECT</span> season, equipe, matchs, buts_pour, buts_contre, difference, rang
+<span class="kw">FROM</span> (
+    <span class="kw">SELECT</span> season, t.team_name <span class="kw">AS</span> equipe, matchs, buts_pour, buts_contre, difference,
+           <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> season <span class="kw">ORDER BY</span> difference <span class="kw">DESC</span>, buts_pour <span class="kw">DESC</span>) <span class="kw">AS</span> rang
+    <span class="kw">FROM</span> bilan b
+    <span class="kw">JOIN</span> teams t <span class="kw">USING</span> (team_id)
+) classement
+<span class="kw">WHERE</span> rang &lt;= <span class="num">5</span>
+<span class="kw">ORDER BY</span> season, rang, equipe;
+`,
+    `<span class="cmt">-- avantage du terrain : résultats des équipes qui reçoivent (finales exclues, lieu neutre)</span>
 
-    <span class="cmt">-- rang dans la saison</span>
-    <span class="fn">RANK</span>() <span class="kw">OVER</span> (
-        <span class="kw">PARTITION BY</span> season
-        <span class="kw">ORDER BY</span> buts <span class="kw">DESC</span>
-    ) <span class="kw">AS</span> rang_saison,
+<span class="kw">SELECT</span> season,
+       <span class="fn">COUNT</span>(*)                                              <span class="kw">AS</span> matchs,
+       <span class="fn">ROUND</span>(<span class="fn">AVG</span>(home_goals), <span class="num">2</span>)                             <span class="kw">AS</span> buts_dom_par_match,
+       <span class="fn">ROUND</span>(<span class="fn">AVG</span>(away_goals), <span class="num">2</span>)                             <span class="kw">AS</span> buts_ext_par_match,
+       <span class="fn">ROUND</span>(<span class="num">100.0</span> * <span class="fn">COUNT</span>(*) <span class="kw">FILTER</span> (<span class="kw">WHERE</span> home_goals &gt; away_goals) / <span class="fn">COUNT</span>(*), <span class="num">1</span>) <span class="kw">AS</span> pct_victoires_dom,
+       <span class="fn">ROUND</span>(<span class="num">100.0</span> * <span class="fn">COUNT</span>(*) <span class="kw">FILTER</span> (<span class="kw">WHERE</span> home_goals = away_goals) / <span class="fn">COUNT</span>(*), <span class="num">1</span>) <span class="kw">AS</span> pct_nuls,
+       <span class="fn">ROUND</span>(<span class="num">100.0</span> * <span class="fn">COUNT</span>(*) <span class="kw">FILTER</span> (<span class="kw">WHERE</span> home_goals &lt; away_goals) / <span class="fn">COUNT</span>(*), <span class="num">1</span>) <span class="kw">AS</span> pct_victoires_ext
+<span class="kw">FROM</span> matches
+<span class="kw">WHERE</span> leg &lt;&gt; <span class="str">&#x27;Finale&#x27;</span>
+<span class="kw">GROUP BY</span> season
+<span class="kw">ORDER BY</span> season;
+`,
+    `<span class="cmt">-- meilleurs buteurs de chaque saison, avec le tour atteint par leur club en phase finale</span>
 
-    <span class="cmt">-- buts la saison d'avant</span>
-    <span class="fn">LAG</span>(buts, <span class="num">1</span>) <span class="kw">OVER</span> (
-        <span class="kw">PARTITION BY</span> player_name
-        <span class="kw">ORDER BY</span> season
-    ) <span class="kw">AS</span> buts_saison_prec,
-
-    <span class="cmt">-- différence avec la saison précédente</span>
-    buts - <span class="fn">LAG</span>(buts, <span class="num">1</span>) <span class="kw">OVER</span> (
-        <span class="kw">PARTITION BY</span> player_name
-        <span class="kw">ORDER BY</span> season
-    ) <span class="kw">AS</span> progression,
-
-    <span class="cmt">-- total cumulé sur toutes les saisons</span>
-    <span class="fn">SUM</span>(buts) <span class="kw">OVER</span> (
-        <span class="kw">PARTITION BY</span> player_name
-        <span class="kw">ORDER BY</span> season
-        <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>
-    ) <span class="kw">AS</span> buts_cumules,
-
-    <span class="cmt">-- meilleure saison du joueur</span>
-    <span class="fn">FIRST_VALUE</span>(buts) <span class="kw">OVER</span> (
-        <span class="kw">PARTITION BY</span> player_name
-        <span class="kw">ORDER BY</span> buts <span class="kw">DESC</span>
-    ) <span class="kw">AS</span> record_saison
-
-<span class="kw">FROM</span> <span class="tbl">par_saison</span>
-<span class="kw">ORDER BY</span> player_name, season;`,
-
-    /* 3 defense.sql */
-    `<span class="cmt">-- analyse défensive par équipe : clean sheets, tacles, possession
--- NTILE pour classer les défenses en 3 tiers</span>
-
-<span class="kw">WITH</span> <span class="tbl">def_base</span> <span class="kw">AS</span> (
-    <span class="kw">SELECT</span>
-        t.team_name,
-        t.country,
-        m.season,
-        <span class="fn">COUNT</span>(m.match_id)                              <span class="kw">AS</span> matchs,
-        <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> ds.goals_conceded = <span class="num">0</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">END</span>) <span class="kw">AS</span> clean_sheets,
-        <span class="fn">ROUND</span>(<span class="fn">AVG</span>(ds.goals_conceded)::NUMERIC, <span class="num">2</span>)     <span class="kw">AS</span> moy_encaisses,
-        <span class="fn">SUM</span>(ds.tackles_won)                            <span class="kw">AS</span> tacles,
-        <span class="fn">SUM</span>(ds.interceptions)                          <span class="kw">AS</span> interceptions,
-        <span class="fn">ROUND</span>(<span class="fn">AVG</span>(ds.possession_pct)::NUMERIC, <span class="num">1</span>)      <span class="kw">AS</span> possession_moy,
-        <span class="fn">ROUND</span>(
-            (<span class="fn">SUM</span>(ds.tackles_won) + <span class="fn">SUM</span>(ds.interceptions))::NUMERIC
-            / <span class="fn">NULLIF</span>(<span class="fn">COUNT</span>(m.match_id), <span class="num">0</span>), <span class="num">1</span>
-        )                                              <span class="kw">AS</span> actions_def_par_match
-    <span class="kw">FROM</span> <span class="tbl">teams</span>     t
-    <span class="kw">JOIN</span> <span class="tbl">def_stats</span> ds <span class="kw">ON</span> t.team_id   = ds.team_id
-    <span class="kw">JOIN</span> <span class="tbl">matches</span>   m  <span class="kw">ON</span> ds.match_id = m.match_id
-    <span class="kw">GROUP BY</span> t.team_name, t.country, m.season
+<span class="kw">WITH</span> tours <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> season, team_id,
+           <span class="fn">MAX</span>(<span class="kw">CASE</span> stage <span class="kw">WHEN</span> <span class="str">&#x27;Huitièmes&#x27;</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">WHEN</span> <span class="str">&#x27;Quarts&#x27;</span> <span class="kw">THEN</span> <span class="num">2</span> <span class="kw">WHEN</span> <span class="str">&#x27;Demi-finales&#x27;</span> <span class="kw">THEN</span> <span class="num">3</span> <span class="kw">ELSE</span> <span class="num">4</span> <span class="kw">END</span>) <span class="kw">AS</span> niveau
+    <span class="kw">FROM</span> (
+        <span class="kw">SELECT</span> season, stage, home_team_id <span class="kw">AS</span> team_id <span class="kw">FROM</span> matches
+        <span class="kw">UNION ALL</span>
+        <span class="kw">SELECT</span> season, stage, away_team_id <span class="kw">FROM</span> matches
+    ) x
+    <span class="kw">GROUP BY</span> season, team_id
 )
-<span class="kw">SELECT</span>
-    *,
-    <span class="fn">NTILE</span>(<span class="num">3</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> clean_sheets <span class="kw">DESC</span>)    <span class="kw">AS</span> tier,
-    <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (
-        <span class="kw">PARTITION BY</span> season
-        <span class="kw">ORDER BY</span> clean_sheets <span class="kw">DESC</span>
-    )                                               <span class="kw">AS</span> rang_saison
-<span class="kw">FROM</span> <span class="tbl">def_base</span>
-<span class="kw">ORDER BY</span> season <span class="kw">DESC</span>, clean_sheets <span class="kw">DESC</span>;`,
+<span class="kw">SELECT</span> b.season,
+       <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> b.season <span class="kw">ORDER BY</span> b.goals <span class="kw">DESC</span>) <span class="kw">AS</span> rang,
+       p.player_name <span class="kw">AS</span> joueur,
+       t.team_name   <span class="kw">AS</span> club,
+       b.goals       <span class="kw">AS</span> buts,
+       <span class="kw">CASE</span> tr.niveau
+            <span class="kw">WHEN</span> <span class="num">1</span> <span class="kw">THEN</span> <span class="str">&#x27;Huitièmes&#x27;</span>
+            <span class="kw">WHEN</span> <span class="num">2</span> <span class="kw">THEN</span> <span class="str">&#x27;Quarts&#x27;</span>
+            <span class="kw">WHEN</span> <span class="num">3</span> <span class="kw">THEN</span> <span class="str">&#x27;Demi-finales&#x27;</span>
+            <span class="kw">WHEN</span> <span class="num">4</span> <span class="kw">THEN</span> <span class="str">&#x27;Finale&#x27;</span>
+            <span class="kw">ELSE</span> <span class="str">&#x27;Éliminé avant&#x27;</span>
+       <span class="kw">END</span> <span class="kw">AS</span> tour_atteint
+<span class="kw">FROM</span> top_buteurs b
+<span class="kw">JOIN</span> players p <span class="kw">USING</span> (player_id)
+<span class="kw">JOIN</span> teams   t <span class="kw">USING</span> (team_id)
+<span class="kw">LEFT JOIN</span> tours tr <span class="kw">ON</span> tr.season = b.season <span class="kw">AND</span> tr.team_id = b.team_id
+<span class="kw">ORDER BY</span> b.season, rang, joueur;
+`,
+    `<span class="cmt">-- évolution des clubs présents en phase finale deux saisons de suite (LAG)</span>
 
-    /* 4 saison_vs_saison.sql */
-    `<span class="cmt">-- comparaison des deux saisons : buts, rythme, possession
--- LEFT JOIN de la table sur elle-même avec décalage d'un an</span>
-
-<span class="kw">WITH</span> <span class="tbl">par_saison</span> <span class="kw">AS</span> (
-    <span class="kw">SELECT</span>
-        m.season,
-        <span class="fn">SUBSTRING</span>(m.season, <span class="num">1</span>, <span class="num">4</span>)::INT                   <span class="kw">AS</span> annee,
-        <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> m.match_id)                        <span class="kw">AS</span> matchs,
-        <span class="fn">SUM</span>(m.home_goals + m.away_goals)                  <span class="kw">AS</span> total_buts,
-        <span class="fn">ROUND</span>(<span class="fn">AVG</span>(m.home_goals+m.away_goals)::NUMERIC,<span class="num">2</span>) <span class="kw">AS</span> moy_buts,
-        <span class="fn">SUM</span>(ds.fouls_committed)                            <span class="kw">AS</span> fautes,
-        <span class="fn">ROUND</span>(<span class="fn">AVG</span>(ds.possession_pct)::NUMERIC, <span class="num">1</span>)          <span class="kw">AS</span> possession_moy
-    <span class="kw">FROM</span> <span class="tbl">matches</span>   m
-    <span class="kw">JOIN</span> <span class="tbl">def_stats</span> ds <span class="kw">ON</span> m.match_id = ds.match_id
-    <span class="kw">GROUP BY</span> m.season
+<span class="kw">WITH</span> buts <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> season, team_id, <span class="fn">SUM</span>(pour) <span class="kw">AS</span> buts_marques, <span class="fn">SUM</span>(contre) <span class="kw">AS</span> buts_encaisses
+    <span class="kw">FROM</span> (
+        <span class="kw">SELECT</span> season, home_team_id <span class="kw">AS</span> team_id, home_goals <span class="kw">AS</span> pour, away_goals <span class="kw">AS</span> contre <span class="kw">FROM</span> matches
+        <span class="kw">UNION ALL</span>
+        <span class="kw">SELECT</span> season, away_team_id, away_goals, home_goals <span class="kw">FROM</span> matches
+    ) x
+    <span class="kw">GROUP BY</span> season, team_id
+),
+evolution <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> team_id, season, buts_marques, buts_encaisses,
+           <span class="fn">LAG</span>(buts_marques)   <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> team_id <span class="kw">ORDER BY</span> season) <span class="kw">AS</span> marques_avant,
+           <span class="fn">LAG</span>(buts_encaisses) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> team_id <span class="kw">ORDER BY</span> season) <span class="kw">AS</span> encaisses_avant
+    <span class="kw">FROM</span> buts
 )
-<span class="kw">SELECT</span>
-    curr.season,
-    curr.total_buts,
-    prev.total_buts                                    <span class="kw">AS</span> buts_saison_prec,
-    curr.total_buts - <span class="fn">COALESCE</span>(prev.total_buts, <span class="num">0</span>)    <span class="kw">AS</span> delta,
-    <span class="fn">ROUND</span>(
-        (curr.total_buts - <span class="fn">COALESCE</span>(prev.total_buts, curr.total_buts))::NUMERIC
-        / <span class="fn">NULLIF</span>(prev.total_buts, <span class="num">0</span>) * <span class="num">100</span>, <span class="num">1</span>
-    )                                                   <span class="kw">AS</span> evolution_pct,
-    curr.moy_buts,
-    curr.possession_moy,
-    curr.fautes
-<span class="kw">FROM</span>      <span class="tbl">par_saison</span> curr
-<span class="kw">LEFT JOIN</span> <span class="tbl">par_saison</span> prev <span class="kw">ON</span> curr.annee = prev.annee + <span class="num">1</span>
-<span class="kw">ORDER BY</span> curr.annee <span class="kw">DESC</span>;`,
+<span class="kw">SELECT</span> t.team_name <span class="kw">AS</span> equipe,
+       marques_avant   <span class="kw">AS</span> marques_2021_22,   buts_marques   <span class="kw">AS</span> marques_2022_23,
+       encaisses_avant <span class="kw">AS</span> encaisses_2021_22, buts_encaisses <span class="kw">AS</span> encaisses_2022_23,
+       buts_marques - marques_avant <span class="kw">AS</span> evolution_buts_marques
+<span class="kw">FROM</span> evolution e
+<span class="kw">JOIN</span> teams t <span class="kw">USING</span> (team_id)
+<span class="kw">WHERE</span> season = <span class="str">&#x27;2022-23&#x27;</span> <span class="kw">AND</span> marques_avant <span class="kw">IS NOT NULL</span>
+<span class="kw">ORDER BY</span> evolution_buts_marques <span class="kw">DESC</span>;
+`,
+    `<span class="cmt">-- parcours d&#x27;un club : tous les matchs d&#x27;une équipe, avec le cumul de buts au fil des rounds (ici Real Madrid)</span>
 
-    /* 5 profil_joueur.sql */
-    `<span class="cmt">-- profil complet d'un joueur : stats + ratios + cumul
--- changer le player_id pour voir un autre joueur</span>
-
-<span class="kw">WITH</span> <span class="tbl">career</span> <span class="kw">AS</span> (
-    <span class="kw">SELECT</span>
-        p.player_name, p.nationality, p.position,
-        m.season, t.team_name,
-        <span class="fn">SUM</span>(s.goals)               <span class="kw">AS</span> buts,
-        <span class="fn">SUM</span>(s.assists)             <span class="kw">AS</span> passes_dec,
-        <span class="fn">SUM</span>(s.shots)               <span class="kw">AS</span> tirs,
-        <span class="fn">SUM</span>(s.shots_on_target)     <span class="kw">AS</span> tirs_cadres,
-        <span class="fn">SUM</span>(s.key_passes)          <span class="kw">AS</span> passes_cles,
-        <span class="fn">SUM</span>(s.minutes_played)      <span class="kw">AS</span> minutes,
-        <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> s.match_id) <span class="kw">AS</span> matchs
-    <span class="kw">FROM</span> <span class="tbl">players</span> p
-    <span class="kw">JOIN</span> <span class="tbl">stats</span>   s <span class="kw">ON</span> p.player_id = s.player_id
-    <span class="kw">JOIN</span> <span class="tbl">matches</span> m <span class="kw">ON</span> s.match_id  = m.match_id
-    <span class="kw">JOIN</span> <span class="tbl">teams</span>   t <span class="kw">ON</span> p.team_id   = t.team_id
-    <span class="kw">WHERE</span>  p.player_id = <span class="num">6</span>   <span class="cmt">-- Haaland</span>
-    <span class="kw">GROUP BY</span> p.player_name, p.nationality, p.position, m.season, t.team_name
+<span class="kw">WITH</span> parcours <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> m.season, m.stage, m.leg,
+           <span class="kw">CASE</span> <span class="kw">WHEN</span> m.leg = <span class="str">&#x27;Finale&#x27;</span> <span class="kw">THEN</span> <span class="str">&#x27;Neutre&#x27;</span> <span class="kw">WHEN</span> m.home_team_id = t.team_id <span class="kw">THEN</span> <span class="str">&#x27;Domicile&#x27;</span> <span class="kw">ELSE</span> <span class="str">&#x27;Extérieur&#x27;</span> <span class="kw">END</span> <span class="kw">AS</span> lieu,
+           <span class="kw">CASE</span> <span class="kw">WHEN</span> m.home_team_id = t.team_id <span class="kw">THEN</span> a.team_name <span class="kw">ELSE</span> h.team_name <span class="kw">END</span> <span class="kw">AS</span> adversaire,
+           <span class="kw">CASE</span> <span class="kw">WHEN</span> m.home_team_id = t.team_id <span class="kw">THEN</span> m.home_goals <span class="kw">ELSE</span> m.away_goals <span class="kw">END</span> <span class="kw">AS</span> pour,
+           <span class="kw">CASE</span> <span class="kw">WHEN</span> m.home_team_id = t.team_id <span class="kw">THEN</span> m.away_goals <span class="kw">ELSE</span> m.home_goals <span class="kw">END</span> <span class="kw">AS</span> contre,
+           m.match_id
+    <span class="kw">FROM</span> matches m
+    <span class="kw">JOIN</span> teams t <span class="kw">ON</span> t.team_name = <span class="str">&#x27;Real Madrid&#x27;</span> <span class="kw">AND</span> t.team_id <span class="kw">IN</span> (m.home_team_id, m.away_team_id)
+    <span class="kw">JOIN</span> teams h <span class="kw">ON</span> h.team_id = m.home_team_id
+    <span class="kw">JOIN</span> teams a <span class="kw">ON</span> a.team_id = m.away_team_id
 )
-<span class="kw">SELECT</span>
-    *,
-    <span class="fn">ROUND</span>(buts::NUMERIC / <span class="fn">NULLIF</span>(matchs, <span class="num">0</span>), <span class="num">2</span>)        <span class="kw">AS</span> buts_par_match,
-    <span class="fn">ROUND</span>(buts::NUMERIC / <span class="fn">NULLIF</span>(minutes, <span class="num">0</span>) * <span class="num">90</span>, <span class="num">2</span>) <span class="kw">AS</span> buts_p90,
-    <span class="fn">ROUND</span>(tirs_cadres::NUMERIC / <span class="fn">NULLIF</span>(tirs, <span class="num">0</span>) * <span class="num">100</span>, <span class="num">1</span>) <span class="kw">AS</span> precision_pct,
-    <span class="fn">SUM</span>(buts) <span class="kw">OVER</span> (
-        <span class="kw">ORDER BY</span> season
-        <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>
-    ) <span class="kw">AS</span> buts_cumules
-<span class="kw">FROM</span> <span class="tbl">career</span>
-<span class="kw">ORDER BY</span> season;`
+<span class="kw">SELECT</span> season, stage <span class="kw">AS</span> tour, leg, adversaire, lieu,
+       pour || <span class="str">&#x27; - &#x27;</span> || contre <span class="kw">AS</span> score,
+       <span class="kw">CASE</span> <span class="kw">WHEN</span> pour &gt; contre <span class="kw">THEN</span> <span class="str">&#x27;V&#x27;</span> <span class="kw">WHEN</span> pour = contre <span class="kw">THEN</span> <span class="str">&#x27;N&#x27;</span> <span class="kw">ELSE</span> <span class="str">&#x27;D&#x27;</span> <span class="kw">END</span> <span class="kw">AS</span> resultat,
+       <span class="fn">SUM</span>(pour) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> season <span class="kw">ORDER BY</span> match_id) <span class="kw">AS</span> buts_cumules
+<span class="kw">FROM</span> parcours
+<span class="kw">ORDER BY</span> match_id;
+`
   ],
-
   p2: [
     /* 0 nettoyage.py */
     `<span class="cmt"># nettoyage des relevés bancaires CSV avant import Power BI
@@ -845,6 +888,17 @@ const CODE = {
   ]
 };
 
+const RESULT = {
+  p1: [
+    null,
+    `<table><thead><tr><th>season</th><th>tour</th><th>equipe</th><th>cumul</th></tr></thead><tbody><tr><td>2021-22</td><td>Huitièmes</td><td>Bayern Munich</td><td>8 - 2</td></tr><tr><td>2021-22</td><td>Huitièmes</td><td>Manchester City</td><td>5 - 0</td></tr><tr><td>2021-22</td><td>Huitièmes</td><td>Benfica</td><td>3 - 2</td></tr><tr><td>2021-22</td><td>Huitièmes</td><td>Chelsea</td><td>4 - 1</td></tr><tr><td>2021-22</td><td>Huitièmes</td><td>Atlético Madrid</td><td>2 - 1</td></tr><tr><td>2021-22</td><td>Huitièmes</td><td>Villarreal</td><td>4 - 1</td></tr><tr><td>2021-22</td><td>Huitièmes</td><td>Liverpool</td><td>2 - 1</td></tr><tr><td>2021-22</td><td>Huitièmes</td><td>Real Madrid</td><td>3 - 2</td></tr><tr><td>2021-22</td><td>Quarts</td><td>Real Madrid</td><td>5 - 4</td></tr><tr><td>2021-22</td><td>Quarts</td><td>Manchester City</td><td>1 - 0</td></tr><tr><td>2021-22</td><td>Quarts</td><td>Villarreal</td><td>2 - 1</td></tr><tr><td>2021-22</td><td>Quarts</td><td>Liverpool</td><td>6 - 4</td></tr><tr><td>2021-22</td><td>Demi-finales</td><td>Real Madrid</td><td>6 - 5</td></tr><tr><td>2021-22</td><td>Demi-finales</td><td>Liverpool</td><td>5 - 2</td></tr><tr><td>2022-23</td><td>Huitièmes</td><td>Manchester City</td><td>8 - 1</td></tr><tr><td>2022-23</td><td>Huitièmes</td><td>Benfica</td><td>7 - 1</td></tr><tr><td>2022-23</td><td>Huitièmes</td><td>Real Madrid</td><td>6 - 2</td></tr><tr><td>2022-23</td><td>Huitièmes</td><td>AC Milan</td><td>1 - 0</td></tr><tr><td>2022-23</td><td>Huitièmes</td><td>Napoli</td><td>5 - 0</td></tr><tr><td>2022-23</td><td>Huitièmes</td><td>Chelsea</td><td>2 - 1</td></tr><tr><td>2022-23</td><td>Huitièmes</td><td>Inter Milan</td><td>1 - 0</td></tr><tr><td>2022-23</td><td>Huitièmes</td><td>Bayern Munich</td><td>3 - 0</td></tr><tr><td>2022-23</td><td>Quarts</td><td>Real Madrid</td><td>4 - 0</td></tr><tr><td>2022-23</td><td>Quarts</td><td>Inter Milan</td><td>5 - 3</td></tr><tr><td>2022-23</td><td>Quarts</td><td>Manchester City</td><td>4 - 1</td></tr><tr><td>2022-23</td><td>Quarts</td><td>AC Milan</td><td>2 - 1</td></tr><tr><td>2022-23</td><td>Demi-finales</td><td>Inter Milan</td><td>3 - 0</td></tr><tr><td>2022-23</td><td>Demi-finales</td><td>Manchester City</td><td>5 - 1</td></tr></tbody></table><div class="rcount">28 lignes</div>`,
+    `<table><thead><tr><th>season</th><th>equipe</th><th>matchs</th><th>buts_pour</th><th>buts_contre</th><th>difference</th><th>rang</th></tr></thead><tbody><tr><td>2021-22</td><td>Liverpool</td><td>7</td><td>13</td><td>8</td><td>5</td><td>1</td></tr><tr><td>2021-22</td><td>Manchester City</td><td>6</td><td>11</td><td>6</td><td>5</td><td>2</td></tr><tr><td>2021-22</td><td>Bayern Munich</td><td>4</td><td>9</td><td>4</td><td>5</td><td>3</td></tr><tr><td>2021-22</td><td>Real Madrid</td><td>7</td><td>15</td><td>11</td><td>4</td><td>4</td></tr><tr><td>2021-22</td><td>Chelsea</td><td>4</td><td>8</td><td>6</td><td>2</td><td>5</td></tr><tr><td>2022-23</td><td>Manchester City</td><td>7</td><td>18</td><td>3</td><td>15</td><td>1</td></tr><tr><td>2022-23</td><td>Inter Milan</td><td>7</td><td>9</td><td>4</td><td>5</td><td>2</td></tr><tr><td>2022-23</td><td>Real Madrid</td><td>6</td><td>11</td><td>7</td><td>4</td><td>3</td></tr><tr><td>2022-23</td><td>Benfica</td><td>4</td><td>10</td><td>6</td><td>4</td><td>4</td></tr><tr><td>2022-23</td><td>Napoli</td><td>4</td><td>6</td><td>2</td><td>4</td><td>5</td></tr></tbody></table><div class="rcount">10 lignes</div>`,
+    `<table><thead><tr><th>season</th><th>matchs</th><th>buts_dom_par_match</th><th>buts_ext_par_match</th><th>pct_victoires_dom</th><th>pct_nuls</th><th>pct_victoires_ext</th></tr></thead><tbody><tr><td>2021-22</td><td>28</td><td>1.43</td><td>1.50</td><td>32.1</td><td>28.6</td><td>39.3</td></tr><tr><td>2022-23</td><td>28</td><td>1.54</td><td>0.86</td><td>50.0</td><td>25.0</td><td>25.0</td></tr></tbody></table><div class="rcount">2 lignes</div>`,
+    `<table><thead><tr><th>season</th><th>rang</th><th>joueur</th><th>club</th><th>buts</th><th>tour_atteint</th></tr></thead><tbody><tr><td>2021-22</td><td>1</td><td>Karim Benzema</td><td>Real Madrid</td><td>15</td><td>Finale</td></tr><tr><td>2021-22</td><td>2</td><td>Robert Lewandowski</td><td>Bayern Munich</td><td>13</td><td>Quarts</td></tr><tr><td>2021-22</td><td>3</td><td>Sébastien Haller</td><td>Ajax</td><td>11</td><td>Huitièmes</td></tr><tr><td>2021-22</td><td>4</td><td>Mohamed Salah</td><td>Liverpool</td><td>8</td><td>Finale</td></tr><tr><td>2021-22</td><td>5</td><td>Christopher Nkunku</td><td>RB Leipzig</td><td>7</td><td>Éliminé avant</td></tr><tr><td>2021-22</td><td>5</td><td>Riyad Mahrez</td><td>Manchester City</td><td>7</td><td>Demi-finales</td></tr><tr><td>2021-22</td><td>7</td><td>Arnaut Danjuma</td><td>Villarreal</td><td>6</td><td>Demi-finales</td></tr><tr><td>2021-22</td><td>7</td><td>Cristiano Ronaldo</td><td>Manchester United</td><td>6</td><td>Huitièmes</td></tr><tr><td>2021-22</td><td>7</td><td>Darwin Núñez</td><td>Benfica</td><td>6</td><td>Quarts</td></tr><tr><td>2021-22</td><td>7</td><td>Kylian Mbappé</td><td>Paris Saint-Germain</td><td>6</td><td>Huitièmes</td></tr><tr><td>2021-22</td><td>7</td><td>Leroy Sané</td><td>Bayern Munich</td><td>6</td><td>Quarts</td></tr><tr><td>2022-23</td><td>1</td><td>Erling Haaland</td><td>Manchester City</td><td>12</td><td>Finale</td></tr><tr><td>2022-23</td><td>2</td><td>Mohamed Salah</td><td>Liverpool</td><td>8</td><td>Huitièmes</td></tr><tr><td>2022-23</td><td>3</td><td>Kylian Mbappé</td><td>Paris Saint-Germain</td><td>7</td><td>Huitièmes</td></tr><tr><td>2022-23</td><td>3</td><td>Vinícius Júnior</td><td>Real Madrid</td><td>7</td><td>Demi-finales</td></tr><tr><td>2022-23</td><td>5</td><td>João Mário</td><td>Benfica</td><td>6</td><td>Quarts</td></tr><tr><td>2022-23</td><td>6</td><td>Mehdi Taremi</td><td>FC Porto</td><td>5</td><td>Huitièmes</td></tr><tr><td>2022-23</td><td>6</td><td>Olivier Giroud</td><td>AC Milan</td><td>5</td><td>Demi-finales</td></tr><tr><td>2022-23</td><td>6</td><td>Rafa Silva</td><td>Benfica</td><td>5</td><td>Quarts</td></tr><tr><td>2022-23</td><td>6</td><td>Robert Lewandowski</td><td>FC Barcelone</td><td>5</td><td>Éliminé avant</td></tr><tr><td>2022-23</td><td>6</td><td>Rodrygo</td><td>Real Madrid</td><td>5</td><td>Demi-finales</td></tr><tr><td>2022-23</td><td>6</td><td>Victor Osimhen</td><td>Napoli</td><td>5</td><td>Quarts</td></tr></tbody></table><div class="rcount">22 lignes</div>`,
+    `<table><thead><tr><th>equipe</th><th>marques_2021_22</th><th>marques_2022_23</th><th>encaisses_2021_22</th><th>encaisses_2022_23</th><th>evolution_buts_marques</th></tr></thead><tbody><tr><td>Inter Milan</td><td>1</td><td>9</td><td>2</td><td>4</td><td>8</td></tr><tr><td>Manchester City</td><td>11</td><td>18</td><td>6</td><td>3</td><td>7</td></tr><tr><td>Benfica</td><td>7</td><td>10</td><td>8</td><td>6</td><td>3</td></tr><tr><td>Paris Saint-Germain</td><td>2</td><td>0</td><td>3</td><td>3</td><td>-2</td></tr><tr><td>Real Madrid</td><td>15</td><td>11</td><td>11</td><td>7</td><td>-4</td></tr><tr><td>Bayern Munich</td><td>9</td><td>4</td><td>4</td><td>4</td><td>-5</td></tr><tr><td>Chelsea</td><td>8</td><td>2</td><td>6</td><td>5</td><td>-6</td></tr><tr><td>Liverpool</td><td>13</td><td>2</td><td>8</td><td>6</td><td>-11</td></tr></tbody></table><div class="rcount">8 lignes</div>`,
+    `<table><thead><tr><th>season</th><th>tour</th><th>leg</th><th>adversaire</th><th>lieu</th><th>score</th><th>resultat</th><th>buts_cumules</th></tr></thead><tbody><tr><td>2021-22</td><td>Huitièmes</td><td>Aller</td><td>Paris Saint-Germain</td><td>Extérieur</td><td>0 - 1</td><td>D</td><td>0</td></tr><tr><td>2021-22</td><td>Huitièmes</td><td>Retour</td><td>Paris Saint-Germain</td><td>Domicile</td><td>3 - 1</td><td>V</td><td>3</td></tr><tr><td>2021-22</td><td>Quarts</td><td>Aller</td><td>Chelsea</td><td>Extérieur</td><td>3 - 1</td><td>V</td><td>6</td></tr><tr><td>2021-22</td><td>Quarts</td><td>Retour</td><td>Chelsea</td><td>Domicile</td><td>2 - 3</td><td>D</td><td>8</td></tr><tr><td>2021-22</td><td>Demi-finales</td><td>Aller</td><td>Manchester City</td><td>Extérieur</td><td>3 - 4</td><td>D</td><td>11</td></tr><tr><td>2021-22</td><td>Demi-finales</td><td>Retour</td><td>Manchester City</td><td>Domicile</td><td>3 - 1</td><td>V</td><td>14</td></tr><tr><td>2021-22</td><td>Finale</td><td>Finale</td><td>Liverpool</td><td>Neutre</td><td>1 - 0</td><td>V</td><td>15</td></tr><tr><td>2022-23</td><td>Huitièmes</td><td>Aller</td><td>Liverpool</td><td>Extérieur</td><td>5 - 2</td><td>V</td><td>5</td></tr><tr><td>2022-23</td><td>Huitièmes</td><td>Retour</td><td>Liverpool</td><td>Domicile</td><td>1 - 0</td><td>V</td><td>6</td></tr><tr><td>2022-23</td><td>Quarts</td><td>Aller</td><td>Chelsea</td><td>Domicile</td><td>2 - 0</td><td>V</td><td>8</td></tr><tr><td>2022-23</td><td>Quarts</td><td>Retour</td><td>Chelsea</td><td>Extérieur</td><td>2 - 0</td><td>V</td><td>10</td></tr><tr><td>2022-23</td><td>Demi-finales</td><td>Aller</td><td>Manchester City</td><td>Domicile</td><td>1 - 1</td><td>N</td><td>11</td></tr><tr><td>2022-23</td><td>Demi-finales</td><td>Retour</td><td>Manchester City</td><td>Extérieur</td><td>0 - 4</td><td>D</td><td>11</td></tr></tbody></table><div class="rcount">13 lignes</div>`
+  ]
+};
 const active = { p1: 0, p2: 0, p3: 0, p4: 0 };
 
 function toggle(id) {
@@ -871,6 +925,12 @@ function tab(id, idx, el) {
 function render(id) {
   if (!CODE[id]) return;
   document.getElementById(id + '-code').innerHTML = CODE[id][active[id]];
+  const box = document.getElementById(id + '-result');
+  if (box) {
+    const r = RESULT[id] && RESULT[id][active[id]];
+    box.innerHTML = r ? '<div class="rtitle">Résultat obtenu sous PostgreSQL</div>' + r : '';
+    box.style.display = r ? 'block' : 'none';
+  }
 }
 
 
