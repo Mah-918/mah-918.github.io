@@ -367,11 +367,11 @@
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-kicker">Alternance data/IA — sept. 2026</div>
+  <div class="hero-kicker">Alternance data/IA — disponible immédiatement</div>
   <h1>Mahmoud<br><span class="name-color">Aboukamar</span></h1>
   <p class="hero-bio">
-    Cycle préparatoire à <strong>ECAM EPMI</strong>, actuellement en Big Data &amp; ML à <strong>EFREI Paris</strong>.<br>
-    J'ai développé mes compétences en data sur des projets personnels — analyse de données football en SQL et suivi budgétaire sous Power BI.
+    Cycle préparatoire à <strong>ECAM EPMI</strong>, actuellement en 3e année d'école d'ingénieur à <strong>EFREI Paris</strong>, majeure Big Data &amp; Machine Learning.<br>
+    Je me forme en construisant : analyse de données football en SQL, suivi budgétaire sous Power BI, un assistant IA testé question par question et un projet d'application mené en binôme.
   </p>
   <div class="cta-row">
     <button class="cta-main" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">
@@ -398,6 +398,8 @@
       <span class="skill-chip">JavaScript</span>
       <span class="skill-chip">Git</span>
       <span class="skill-chip">Excel</span>
+      <span class="skill-chip">Power Query</span>
+      <span class="skill-chip">IA générative (Claude)</span>
     </div>
   </section>
 
@@ -405,7 +407,7 @@
   <section class="section" id="projects">
     <div class="section-tag">Projets</div>
     <h2>Projets</h2>
-    <p class="section-sub">Deux projets réalisés en autonomie, sur des sujets qui me tiennent à cœur.</p>
+    <p class="section-sub">Quatre projets, dont trois menés en autonomie, sur des sujets qui me tiennent à cœur. Clique sur un projet pour voir le détail.</p>
 
     <!-- ── PROJECT 1 : SQL UCL ── -->
     <div class="project fade" id="p1">
@@ -527,12 +529,82 @@ DIM_Budget        : Budget_ID, Mois_Num, Categorie, Montant_Prevu
       </div>
     </div>
 
+    <!-- ── PROJECT 3 : Assistant IA ── -->
+    <div class="project fade" id="p3">
+      <div class="project-top" onclick="toggle('p3')">
+        <div>
+          <div class="project-chips">
+            <span class="chip">IA générative</span>
+            <span class="chip">Claude</span>
+            <span class="chip">Évaluation</span>
+            <span class="chip pbi">Excel</span>
+          </div>
+          <div class="project-title">Assistant IA de capitalisation du savoir — Claude</div>
+          <div class="project-desc">
+            Un assistant qui répond à partir d'une base de documents, construit sans écrire de code, puis testé sur 26 questions jusqu'à atteindre 98 % de réponses justes.
+          </div>
+        </div>
+        <div class="project-arrow">+</div>
+      </div>
+
+      <div class="project-body" id="p3-body">
+        <div class="project-inner">
+          <div class="inner-divider"></div>
+
+          <p class="what-i-did">
+            Octobre 2026. Je voulais voir jusqu'où on peut fiabiliser un assistant IA sans programmer. J'ai monté une base de connaissances avec <strong>3 dossiers de consultation (appels d'offres) fictifs</strong>, puis configuré l'assistant pour extraire des informations, faire des calculs et remplir des trames structurées, selon le principe du RAG.
+          </p>
+          <p class="what-i-did">
+            Pour mesurer la qualité, j'ai écrit <strong>26 questions de test</strong>, noté moi-même chaque réponse et suivi les erreurs dans un tableau Excel. Les erreurs m'ont servi à corriger les instructions de l'assistant, puis j'ai relancé les tests : on arrive à <strong>98 % de réponses justes</strong>.
+          </p>
+
+          <div class="numbers">
+            <div class="num-box"><div class="num-val">3</div><div class="num-label">dossiers de consultation</div></div>
+            <div class="num-box"><div class="num-val">26</div><div class="num-label">questions de test</div></div>
+            <div class="num-box"><div class="num-val">98%</div><div class="num-label">réponses justes</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROJECT 4 : Locasport ── -->
+    <div class="project fade" id="p4">
+      <div class="project-top" onclick="toggle('p4')">
+        <div>
+          <div class="project-chips">
+            <span class="chip">Projet entrepreneurial</span>
+            <span class="chip">Business plan</span>
+            <span class="chip">Étude de marché</span>
+          </div>
+          <div class="project-title">Locasport — application de location de matériel sportif</div>
+          <div class="project-desc">
+            Un projet d'application pour louer du matériel sportif, mené en binôme : de l'étude de marché au business plan, avec les besoins des utilisateurs au centre.
+          </div>
+        </div>
+        <div class="project-arrow">+</div>
+      </div>
+
+      <div class="project-body" id="p4-body">
+        <div class="project-inner">
+          <div class="inner-divider"></div>
+
+          <p class="what-i-did">
+            Depuis juin 2026. Nous avons commencé par une <strong>étude de marché</strong>, puis nous avons construit un <strong>business plan complet</strong>.
+          </p>
+          <p class="what-i-did">
+            Je pilote le projet en binôme : répartition des <strong>tâches</strong>, <strong>échéances</strong> et <strong>livrables</strong>, et recueil puis analyse des besoins des utilisateurs. Le projet est toujours en cours.
+          </p>
+        </div>
+      </div>
+    </div>
+
   </section>
 </div>
 
 <footer>
   <div class="footer-text">Mahmoud Aboukamar — EFREI Paris 2026</div>
   <div class="footer-links">
+    <a href="mailto:mahmoudaboukamar@outlook.fr" class="footer-link">Email</a>
     <a href="https://linkedin.com/in/mahmoud-aboukamar" class="footer-link">LinkedIn</a>
   </div>
 </footer>
@@ -1088,7 +1160,7 @@ const CODE = {
   ]
 };
 
-const active = { p1: 0, p2: 0 };
+const active = { p1: 0, p2: 0, p3: 0, p4: 0 };
 
 function toggle(id) {
   const card  = document.getElementById(id);
@@ -1110,6 +1182,7 @@ function tab(id, idx, el) {
 }
 
 function render(id) {
+  if (!CODE[id]) return;
   document.getElementById(id + '-code').innerHTML = CODE[id][active[id]];
 }
 
